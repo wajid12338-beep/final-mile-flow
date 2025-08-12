@@ -1,0 +1,103 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Clock, Truck, Users, MapPin } from "lucide-react";
+
+const Services = () => {
+  const services = [
+    {
+      icon: Clock,
+      title: "Same-Day Courier",
+      description: "Urgent deliveries when time is critical. Get your packages delivered the same day with our reliable courier network.",
+      features: ["Time-critical delivery", "Real-time tracking", "Proof of delivery", "Nationwide coverage"],
+    },
+    {
+      icon: MapPin,
+      title: "Multi-Drop Courier",
+      description: "Efficient multiple-stop deliveries in a single journey. Perfect for businesses with multiple delivery locations.",
+      features: ["Multiple stops", "Route optimization", "Cost-effective", "Flexible scheduling"],
+    },
+    {
+      icon: Truck,
+      title: "Van Day Rate Service",
+      description: "Hire our professional courier crews by the day. Available with 1 or 2-man teams for maximum flexibility.",
+      features: ["Full day hire", "1 or 2-man crews", "Professional drivers", "Flexible solutions"],
+    },
+  ];
+
+  return (
+    <section className="py-20 bg-background">
+      <div className="container mx-auto px-6">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            Our Core Services
+          </h2>
+          <p className="text-xl text-muted-foreground leading-relaxed">
+            Professional delivery solutions tailored to your business needs. 
+            From urgent same-day deliveries to flexible van hire services.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {services.map((service, index) => (
+            <Card 
+              key={index} 
+              className="group hover:shadow-lg transition-all duration-300 border-2 hover:border-logistics-orange/20"
+            >
+              <CardHeader className="text-center pb-4">
+                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-logistics-blue to-logistics-blue-light rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <service.icon className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-2xl font-bold text-foreground group-hover:text-logistics-blue transition-colors duration-300">
+                  {service.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <CardDescription className="text-base text-muted-foreground leading-relaxed">
+                  {service.description}
+                </CardDescription>
+                <ul className="space-y-2">
+                  {service.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center text-sm text-foreground">
+                      <div className="w-2 h-2 bg-logistics-orange rounded-full mr-3 flex-shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <Button 
+                  variant="outline" 
+                  className="w-full mt-6 border-logistics-blue text-logistics-blue hover:bg-logistics-blue hover:text-white transition-all duration-300"
+                >
+                  Learn More
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* 24/7 Availability Banner */}
+        <div className="bg-gradient-to-r from-logistics-blue to-logistics-blue-light rounded-2xl p-8 md:p-12 text-center">
+          <div className="max-w-3xl mx-auto">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
+              <Clock className="h-10 w-10 text-white" />
+            </div>
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Available 24/7, 365 Days
+            </h3>
+            <p className="text-xl text-white/90 mb-8 leading-relaxed">
+              Our services never stop. Whether it's midnight, weekend, or bank holiday - 
+              we're here to deliver when you need us most.
+            </p>
+            <Button 
+              size="lg"
+              className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              Request Emergency Delivery
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Services;
