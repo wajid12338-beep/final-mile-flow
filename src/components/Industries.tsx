@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShoppingBag, Heart, Utensils, Plane, Calendar, Package } from "lucide-react";
+import ukCoverageImage from "@/assets/uk-coverage.jpg";
 
 const Industries = () => {
   const industries = [
@@ -100,7 +101,7 @@ const Industries = () => {
               </div>
               <div className="relative">
                 <img
-                  src="/src/assets/uk-coverage.jpg"
+                  src={ukCoverageImage}
                   alt="UK delivery coverage map"
                   className="w-full h-auto rounded-xl shadow-lg"
                 />
