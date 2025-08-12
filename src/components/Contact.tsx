@@ -102,7 +102,7 @@ const Contact = () => {
                   <Mail className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-2">Email</h3>
-                <p className="text-muted-foreground">info@onitlogistics.co.uk</p>
+                <p className="text-muted-foreground">info@azsameday.co.uk</p>
               </Card>
             </div>
 

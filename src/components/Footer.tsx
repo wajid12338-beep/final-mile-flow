@@ -12,7 +12,7 @@ const Footer = () => {
                 <Truck className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold">Onit Logistics</h3>
+                <h3 className="text-xl font-bold">AZ Same day</h3>
                 <p className="text-sm text-white/70">Final-Mile Excellence</p>
               </div>
             </div>
@@ -54,7 +54,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-logistics-orange flex-shrink-0" />
-                <span className="text-white/80">info@onitlogistics.co.uk</span>
+                <span className="text-white/80">info@azsameday.co.uk</span>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-logistics-orange flex-shrink-0 mt-0.5" />
@@ -71,7 +71,7 @@ const Footer = () => {
         <div className="border-t border-white/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-white/60 text-sm">
-              © 2024 Onit Logistics. All rights reserved.
+              © 2024 AZ Same day. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm text-white/60">
               <a href="#" className="hover:text-logistics-orange transition-colors duration-200">Privacy Policy</a>

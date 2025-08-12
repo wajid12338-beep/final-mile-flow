@@ -12,7 +12,7 @@ const Header = () => {
               <Truck className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-logistics-blue">Onit Logistics</h1>
+              <h1 className="text-xl font-bold text-logistics-blue">AZ Same day</h1>
               <p className="text-xs text-muted-foreground">Final-Mile Excellence</p>
             </div>
           </div>
