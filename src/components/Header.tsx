@@ -41,7 +41,10 @@ const Header = () => {
             >
               Track Delivery
             </Button>
-            <Button className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300">
+            <Button 
+              className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300"
+              onClick={() => window.location.href = '/quotations'}
+            >
               Get Quote
             </Button>
           </div>
