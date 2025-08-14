@@ -6,14 +6,8 @@ const Header = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200">
-            <div className="w-12 h-12 flex items-center justify-center">
-              <img src="/lovable-uploads/4d1ca312-1fa6-4205-9ba7-717a631fe2fe.png" alt="Fleetory Logo" className="h-10 w-auto" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-logistics-blue">Fleetory</h1>
-              <p className="text-xs text-muted-foreground">The network that moves you</p>
-            </div>
+          <a href="/" className="flex items-center hover:opacity-80 transition-opacity duration-200">
+            <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-12 w-auto" />
           </a>
 
           {/* Navigation */}
@@ -23,6 +17,9 @@ const Header = () => {
             </a>
             <a href="/fleet" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
               Fleet
+            </a>
+            <a href="/industries" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
+              Industries
             </a>
             <a href="/about" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
               About

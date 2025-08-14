@@ -8,13 +8,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 flex items-center justify-center">
-                <img src="/lovable-uploads/4d1ca312-1fa6-4205-9ba7-717a631fe2fe.png" alt="Fleetory Logo" className="h-10 w-auto" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Fleetory</h3>
-                <p className="text-sm text-white/70">The network that moves you</p>
-              </div>
+              <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-10 w-auto" />
             </div>
             <p className="text-white/80 leading-relaxed">
               Professional same-day courier services across the UK. 
@@ -38,6 +32,7 @@ const Footer = () => {
             <h4 className="text-lg font-semibold">Quick Links</h4>
             <ul className="space-y-2 text-white/80">
               <li><a href="/fleet" className="hover:text-logistics-orange transition-colors duration-200">Fleet</a></li>
+              <li><a href="/industries" className="hover:text-logistics-orange transition-colors duration-200">Industries</a></li>
               <li><a href="/about" className="hover:text-logistics-orange transition-colors duration-200">About Us</a></li>
               <li><a href="/quotations" className="hover:text-logistics-orange transition-colors duration-200">Get Quote</a></li>
               <li><a href="#contact" className="hover:text-logistics-orange transition-colors duration-200">Contact</a></li>
