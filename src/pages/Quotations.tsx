@@ -100,11 +100,11 @@ const Quotations = () => {
 
   if (isSubmitted && bookingReference) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+      <div className="min-h-screen bg-background">
         <Header />
         <div className="pt-24 pb-16">
           <div className="container mx-auto px-6 max-w-2xl">
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-green-200 bg-green-50/50">
               <CardHeader className="text-center">
                 <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
@@ -160,323 +160,421 @@ const Quotations = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+    <div className="min-h-screen bg-background">
       <Header />
       <div className="pt-24 pb-16">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Instant Quote & Booking</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Don't wait — get your delivery on the road in minutes. Enter your collection and delivery details, 
-              get an instant price, and book your driver right now.
+        <div className="container mx-auto px-6 max-w-5xl">
+          {/* Header Section */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <Package className="w-4 h-4" />
+              Instant Booking
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Get Your Quote & Book Now
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Professional same-day courier service across the UK. Enter your details below for an instant quote 
+              and book your delivery in under 60 seconds.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            {/* Pickup & Delivery Locations */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  Pickup & Delivery Locations
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="pickupAddress">Pickup Address *</Label>
-                  <Textarea
-                    id="pickupAddress"
-                    placeholder="Enter complete pickup address including postcode"
-                    className={cn(errors.pickupAddress && "border-destructive")}
-                    {...register("pickupAddress")}
-                  />
-                  {errors.pickupAddress && (
-                    <p className="text-sm text-destructive">{errors.pickupAddress.message}</p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="deliveryAddress">Delivery Address *</Label>
-                  <Textarea
-                    id="deliveryAddress"
-                    placeholder="Enter complete delivery address including postcode"
-                    className={cn(errors.deliveryAddress && "border-destructive")}
-                    {...register("deliveryAddress")}
-                  />
-                  {errors.deliveryAddress && (
-                    <p className="text-sm text-destructive">{errors.deliveryAddress.message}</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Schedule */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-5 h-5" />
-                  Schedule
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <Label>Pickup Date & Time *</Label>
-                  <div className="flex gap-2">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "justify-start text-left font-normal flex-1",
-                            !watchedPickupDate && "text-muted-foreground",
-                            errors.pickupDate && "border-destructive"
-                          )}
-                        >
-                          {watchedPickupDate ? format(watchedPickupDate, "PPP") : "Pick a date"}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={watchedPickupDate}
-                          onSelect={(date) => setValue("pickupDate", date!)}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main Form */}
+            <div className="lg:col-span-2">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                {/* Locations Card */}
+                <div className="bg-card rounded-xl border border-border shadow-sm">
+                  <div className="p-6 border-b border-border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <MapPin className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-card-foreground">Collection & Delivery</h3>
+                        <p className="text-sm text-muted-foreground">Where should we pick up and deliver?</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-3">
+                        <Label htmlFor="pickupAddress" className="text-sm font-medium">From (Collection Address)</Label>
+                        <Textarea
+                          id="pickupAddress"
+                          placeholder="Enter full collection address including postcode"
+                          className={cn("min-h-[100px] resize-none", errors.pickupAddress && "border-destructive focus-visible:ring-destructive")}
+                          {...register("pickupAddress")}
                         />
-                      </PopoverContent>
-                    </Popover>
-                    
-                    <Select onValueChange={(value) => setValue("pickupTime", value)}>
-                      <SelectTrigger className={cn("flex-1", errors.pickupTime && "border-destructive")}>
-                        <SelectValue placeholder="Time" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {timeSlots.map((slot) => (
-                          <SelectItem key={slot} value={slot}>{slot}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {(errors.pickupDate || errors.pickupTime) && (
-                    <p className="text-sm text-destructive">
-                      {errors.pickupDate?.message || errors.pickupTime?.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="space-y-4">
-                  <Label>Delivery Date & Time *</Label>
-                  <div className="flex gap-2">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "justify-start text-left font-normal flex-1",
-                            !watchedDeliveryDate && "text-muted-foreground",
-                            errors.deliveryDate && "border-destructive"
-                          )}
-                        >
-                          {watchedDeliveryDate ? format(watchedDeliveryDate, "PPP") : "Pick a date"}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={watchedDeliveryDate}
-                          onSelect={(date) => setValue("deliveryDate", date!)}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
+                        {errors.pickupAddress && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.pickupAddress.message}
+                          </p>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <Label htmlFor="deliveryAddress" className="text-sm font-medium">To (Delivery Address)</Label>
+                        <Textarea
+                          id="deliveryAddress"
+                          placeholder="Enter full delivery address including postcode"
+                          className={cn("min-h-[100px] resize-none", errors.deliveryAddress && "border-destructive focus-visible:ring-destructive")}
+                          {...register("deliveryAddress")}
                         />
-                      </PopoverContent>
-                    </Popover>
-                    
-                    <Select onValueChange={(value) => setValue("deliveryTime", value)}>
-                      <SelectTrigger className={cn("flex-1", errors.deliveryTime && "border-destructive")}>
-                        <SelectValue placeholder="Time" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {timeSlots.map((slot) => (
-                          <SelectItem key={slot} value={slot}>{slot}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {(errors.deliveryDate || errors.deliveryTime) && (
-                    <p className="text-sm text-destructive">
-                      {errors.deliveryDate?.message || errors.deliveryTime?.message}
-                    </p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Package Details */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Package className="w-5 h-5" />
-                  Package Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label>Package Type *</Label>
-                    <Select onValueChange={(value) => setValue("packageType", value)}>
-                      <SelectTrigger className={cn(errors.packageType && "border-destructive")}>
-                        <SelectValue placeholder="Select type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {packageTypes.map((type) => (
-                          <SelectItem key={type} value={type}>{type}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {errors.packageType && (
-                      <p className="text-sm text-destructive">{errors.packageType.message}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="packageWeight">Weight *</Label>
-                    <Input
-                      id="packageWeight"
-                      placeholder="e.g., 5kg"
-                      className={cn(errors.packageWeight && "border-destructive")}
-                      {...register("packageWeight")}
-                    />
-                    {errors.packageWeight && (
-                      <p className="text-sm text-destructive">{errors.packageWeight.message}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="packageDimensions">Dimensions *</Label>
-                    <Input
-                      id="packageDimensions"
-                      placeholder="L x W x H (cm)"
-                      className={cn(errors.packageDimensions && "border-destructive")}
-                      {...register("packageDimensions")}
-                    />
-                    {errors.packageDimensions && (
-                      <p className="text-sm text-destructive">{errors.packageDimensions.message}</p>
-                    )}
+                        {errors.deliveryAddress && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.deliveryAddress.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="specialHandling">Special Handling Requirements</Label>
-                  <Textarea
-                    id="specialHandling"
-                    placeholder="Fragile, temperature controlled, signature required, etc."
-                    {...register("specialHandling")}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Contact Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  Contact Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="contactName">Full Name *</Label>
-                    <Input
-                      id="contactName"
-                      placeholder="John Smith"
-                      className={cn(errors.contactName && "border-destructive")}
-                      {...register("contactName")}
-                    />
-                    {errors.contactName && (
-                      <p className="text-sm text-destructive">{errors.contactName.message}</p>
-                    )}
+                {/* Schedule Card */}
+                <div className="bg-card rounded-xl border border-border shadow-sm">
+                  <div className="p-6 border-b border-border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Clock className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-card-foreground">When do you need this?</h3>
+                        <p className="text-sm text-muted-foreground">Select your preferred collection and delivery times</p>
+                      </div>
+                    </div>
                   </div>
+                  <div className="p-6 space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-3">
+                        <Label className="text-sm font-medium">Collection Date & Time</Label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className={cn(
+                                  "justify-start text-left font-normal h-11",
+                                  !watchedPickupDate && "text-muted-foreground",
+                                  errors.pickupDate && "border-destructive"
+                                )}
+                              >
+                                {watchedPickupDate ? format(watchedPickupDate, "dd/MM/yyyy") : "Select date"}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={watchedPickupDate}
+                                onSelect={(date) => setValue("pickupDate", date!)}
+                                disabled={(date) => date < new Date()}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          
+                          <Select onValueChange={(value) => setValue("pickupTime", value)}>
+                            <SelectTrigger className={cn("h-11", errors.pickupTime && "border-destructive")}>
+                              <SelectValue placeholder="Select time" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {timeSlots.map((slot) => (
+                                <SelectItem key={slot} value={slot}>{slot}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        {(errors.pickupDate || errors.pickupTime) && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.pickupDate?.message || errors.pickupTime?.message}
+                          </p>
+                        )}
+                      </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="contactEmail">Email Address *</Label>
-                    <Input
-                      id="contactEmail"
-                      type="email"
-                      placeholder="john@example.com"
-                      className={cn(errors.contactEmail && "border-destructive")}
-                      {...register("contactEmail")}
-                    />
-                    {errors.contactEmail && (
-                      <p className="text-sm text-destructive">{errors.contactEmail.message}</p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="contactPhone">Phone Number *</Label>
-                    <Input
-                      id="contactPhone"
-                      placeholder="+44 7XXX XXXXXX"
-                      className={cn(errors.contactPhone && "border-destructive")}
-                      {...register("contactPhone")}
-                    />
-                    {errors.contactPhone && (
-                      <p className="text-sm text-destructive">{errors.contactPhone.message}</p>
-                    )}
+                      <div className="space-y-3">
+                        <Label className="text-sm font-medium">Delivery Date & Time</Label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className={cn(
+                                  "justify-start text-left font-normal h-11",
+                                  !watchedDeliveryDate && "text-muted-foreground",
+                                  errors.deliveryDate && "border-destructive"
+                                )}
+                              >
+                                {watchedDeliveryDate ? format(watchedDeliveryDate, "dd/MM/yyyy") : "Select date"}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0">
+                              <Calendar
+                                mode="single"
+                                selected={watchedDeliveryDate}
+                                onSelect={(date) => setValue("deliveryDate", date!)}
+                                disabled={(date) => date < new Date()}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          
+                          <Select onValueChange={(value) => setValue("deliveryTime", value)}>
+                            <SelectTrigger className={cn("h-11", errors.deliveryTime && "border-destructive")}>
+                              <SelectValue placeholder="Select time" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {timeSlots.map((slot) => (
+                                <SelectItem key={slot} value={slot}>{slot}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        {(errors.deliveryDate || errors.deliveryTime) && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.deliveryDate?.message || errors.deliveryTime?.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="additionalNotes">Additional Notes</Label>
-                  <Textarea
-                    id="additionalNotes"
-                    placeholder="Any additional information about your delivery..."
-                    {...register("additionalNotes")}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+                {/* Package Details Card */}
+                <div className="bg-card rounded-xl border border-border shadow-sm">
+                  <div className="p-6 border-b border-border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Package className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-card-foreground">Package Information</h3>
+                        <p className="text-sm text-muted-foreground">Tell us about what you're sending</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-6">
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="space-y-3">
+                        <Label className="text-sm font-medium">Package Type</Label>
+                        <Select onValueChange={(value) => setValue("packageType", value)}>
+                          <SelectTrigger className={cn("h-11", errors.packageType && "border-destructive")}>
+                            <SelectValue placeholder="Select type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {packageTypes.map((type) => (
+                              <SelectItem key={type} value={type}>{type}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {errors.packageType && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.packageType.message}
+                          </p>
+                        )}
+                      </div>
 
-            {/* Submit Section */}
-            <Card>
-              <CardContent className="pt-6">
+                      <div className="space-y-3">
+                        <Label htmlFor="packageWeight" className="text-sm font-medium">Weight</Label>
+                        <Input
+                          id="packageWeight"
+                          placeholder="e.g., 5kg"
+                          className={cn("h-11", errors.packageWeight && "border-destructive")}
+                          {...register("packageWeight")}
+                        />
+                        {errors.packageWeight && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.packageWeight.message}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="space-y-3">
+                        <Label htmlFor="packageDimensions" className="text-sm font-medium">Dimensions</Label>
+                        <Input
+                          id="packageDimensions"
+                          placeholder="L x W x H (cm)"
+                          className={cn("h-11", errors.packageDimensions && "border-destructive")}
+                          {...register("packageDimensions")}
+                        />
+                        {errors.packageDimensions && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.packageDimensions.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label htmlFor="specialHandling" className="text-sm font-medium">Special Requirements (Optional)</Label>
+                      <Textarea
+                        id="specialHandling"
+                        placeholder="Fragile, temperature controlled, signature required, etc."
+                        className="resize-none"
+                        rows={3}
+                        {...register("specialHandling")}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Information Card */}
+                <div className="bg-card rounded-xl border border-border shadow-sm">
+                  <div className="p-6 border-b border-border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <User className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-card-foreground">Your Details</h3>
+                        <p className="text-sm text-muted-foreground">We'll use this to confirm your booking</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-6">
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="space-y-3">
+                        <Label htmlFor="contactName" className="text-sm font-medium">Full Name</Label>
+                        <Input
+                          id="contactName"
+                          placeholder="John Smith"
+                          className={cn("h-11", errors.contactName && "border-destructive")}
+                          {...register("contactName")}
+                        />
+                        {errors.contactName && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.contactName.message}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="space-y-3">
+                        <Label htmlFor="contactEmail" className="text-sm font-medium">Email Address</Label>
+                        <Input
+                          id="contactEmail"
+                          type="email"
+                          placeholder="john@example.com"
+                          className={cn("h-11", errors.contactEmail && "border-destructive")}
+                          {...register("contactEmail")}
+                        />
+                        {errors.contactEmail && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.contactEmail.message}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="space-y-3">
+                        <Label htmlFor="contactPhone" className="text-sm font-medium">Phone Number</Label>
+                        <Input
+                          id="contactPhone"
+                          type="tel"
+                          placeholder="+44 7700 000000"
+                          className={cn("h-11", errors.contactPhone && "border-destructive")}
+                          {...register("contactPhone")}
+                        />
+                        {errors.contactPhone && (
+                          <p className="text-xs text-destructive flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {errors.contactPhone.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label htmlFor="additionalNotes" className="text-sm font-medium">Additional Notes (Optional)</Label>
+                      <Textarea
+                        id="additionalNotes"
+                        placeholder="Any special instructions or requirements"
+                        className="resize-none"
+                        rows={3}
+                        {...register("additionalNotes")}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Error Display */}
                 {submitError && (
-                  <div className="mb-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
-                    <AlertCircle className="w-5 h-5 text-destructive" />
-                    <p className="text-destructive">{submitError}</p>
+                  <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-4">
+                    <div className="flex items-center gap-2">
+                      <AlertCircle className="w-5 h-5 text-destructive" />
+                      <p className="text-destructive font-medium">{submitError}</p>
+                    </div>
                   </div>
                 )}
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="flex-1 bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold py-3"
-                  >
-                    {isSubmitting ? "Creating Booking..." : "Get Quote & Create Booking"}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => window.location.href = '/'}
-                    className="sm:w-auto"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-                
-                <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-                  <div className="flex items-start gap-2">
-                    <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
-                    <p className="text-sm text-muted-foreground">
-                      By submitting this form, you agree to our terms of service. One of our specialists will contact you shortly to discuss the request and finalise booking.
+              </form>
+            </div>
+
+            {/* Summary Sidebar */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-32">
+                <div className="bg-card rounded-xl border border-border shadow-sm">
+                  <div className="p-6 border-b border-border">
+                    <h3 className="text-lg font-semibold text-card-foreground">Booking Summary</h3>
+                    <p className="text-sm text-muted-foreground">Review your details</p>
+                  </div>
+                  <div className="p-6 space-y-4">
+                    <div className="text-center py-8">
+                      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Package className="w-8 h-8 text-primary" />
+                      </div>
+                      <p className="text-muted-foreground text-sm mb-4">
+                        Fill in the form to see your quote
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span>Same-day delivery</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span>Real-time tracking</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span>Professional drivers</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span>Secure handling</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <Button 
+                      onClick={handleSubmit(onSubmit)}
+                      disabled={isSubmitting}
+                      className="w-full h-12 text-base font-semibold"
+                      size="lg"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Processing...
+                        </div>
+                      ) : (
+                        "Get Quote & Book Now"
+                      )}
+                    </Button>
+                    
+                    <p className="text-xs text-muted-foreground text-center">
+                      By clicking "Get Quote & Book Now" you agree to our terms and conditions
                     </p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <Footer />
