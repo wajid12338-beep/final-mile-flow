@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,8 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowRight, Info, CheckCircle } from "lucide-react";
+import { ArrowRight, Info, CheckCircle, MapPin, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { calculateDistance, geocodeAddress, calculatePricing } from "@/utils/pricingUtils";
+import RouteMap from "@/components/RouteMap";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -45,6 +47,9 @@ const Booking = () => {
   const [bookingReference, setBookingReference] = useState<string | null>(null);
   const [isCollectionContact, setIsCollectionContact] = useState(true);
   const [collectASAP, setCollectASAP] = useState(true);
+  const [pickupCoords, setPickupCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [deliveryCoords, setDeliveryCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [isCalculatingPrice, setIsCalculatingPrice] = useState(false);
   const [pricing, setPricing] = useState({
     collection: 0,
     delivery: 0,
@@ -66,9 +71,49 @@ const Booking = () => {
     }
   });
 
+
   const watchedCollectFrom = watch("collectFrom");
   const watchedDeliverTo = watch("deliverTo");
   const watchedService = watch("serviceType");
+  const watchedDescription = watch("description");
+
+  // Auto-calculate pricing when addresses, service, or description change
+  useEffect(() => {
+    const calculateInstantPrice = async () => {
+      if (!watchedCollectFrom || !watchedDeliverTo || !watchedService || !watchedDescription) {
+        setPricing({ collection: 0, delivery: 0, price: 0, vat: 0, total: 0 });
+        return;
+      }
+
+      setIsCalculatingPrice(true);
+      
+      try {
+        // Geocode addresses
+        const [pickupGeo, deliveryGeo] = await Promise.all([
+          geocodeAddress(watchedCollectFrom),
+          geocodeAddress(watchedDeliverTo)
+        ]);
+
+        if (pickupGeo && deliveryGeo) {
+          setPickupCoords(pickupGeo);
+          setDeliveryCoords(deliveryGeo);
+          
+          // Calculate distance and pricing
+          const distance = calculateDistance(pickupGeo, deliveryGeo);
+          const newPricing = calculatePricing(distance, watchedService, watchedDescription);
+          setPricing(newPricing);
+        }
+      } catch (error) {
+        console.error('Error calculating price:', error);
+      } finally {
+        setIsCalculatingPrice(false);
+      }
+    };
+
+    // Debounce the calculation
+    const timeoutId = setTimeout(calculateInstantPrice, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [watchedCollectFrom, watchedDeliverTo, watchedService, watchedDescription]);
 
   const services = [
     "Same Day Courier",
@@ -367,29 +412,50 @@ const Booking = () => {
 
               {/* Sidebar */}
               <div className="space-y-6">
+                {/* Route Map */}
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <MapPin className="w-4 h-4" />
+                      <h3 className="font-semibold">Route Preview</h3>
+                    </div>
+                    <RouteMap 
+                      pickup={pickupCoords} 
+                      delivery={deliveryCoords}
+                      className="h-48"
+                    />
+                  </CardContent>
+                </Card>
+
                 {/* Pricing */}
                 <Card>
                   <CardContent className="p-6 space-y-3">
+                    {isCalculatingPrice && (
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span className="text-sm">Calculating price...</span>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span>Collection:</span>
-                      <span>-</span>
+                      <span>{pricing.collection > 0 ? `£${pricing.collection.toFixed(2)}` : '-'}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Delivery:</span>
-                      <span>-</span>
+                      <span>{pricing.delivery > 0 ? `£${pricing.delivery.toFixed(2)}` : '-'}</span>
                     </div>
                     <div className="flex justify-between font-semibold">
                       <span>Price:</span>
-                      <span>-</span>
+                      <span>{pricing.price > 0 ? `£${pricing.price.toFixed(2)}` : '-'}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>VAT:</span>
-                      <span>-</span>
+                      <span>{pricing.vat > 0 ? `£${pricing.vat.toFixed(2)}` : '-'}</span>
                     </div>
                     <div className="border-t pt-3">
                       <div className="flex justify-between font-bold text-lg">
                         <span>Total:</span>
-                        <span>-</span>
+                        <span>{pricing.total > 0 ? `£${pricing.total.toFixed(2)}` : '-'}</span>
                       </div>
                     </div>
                   </CardContent>
