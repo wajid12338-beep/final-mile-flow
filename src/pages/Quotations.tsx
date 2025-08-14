@@ -11,7 +11,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, Package, User, CheckCircle, AlertCircle } from "lucide-react";
+import { MapPin, Clock, Package, User, CheckCircle, AlertCircle, Truck, Ruler, Weight } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
@@ -28,6 +28,7 @@ const bookingSchema = z.object({
     required_error: "Please select a delivery date",
   }),
   deliveryTime: z.string().min(1, "Please select a delivery time"),
+  vehicleType: z.string().min(1, "Please select a vehicle type"),
   packageType: z.string().min(1, "Please select package type"),
   packageWeight: z.string().min(1, "Please enter package weight"),
   packageDimensions: z.string().min(1, "Please enter package dimensions"),
@@ -57,6 +58,7 @@ const Quotations = () => {
 
   const watchedPickupDate = watch("pickupDate");
   const watchedDeliveryDate = watch("deliveryDate");
+  const watchedVehicleType = watch("vehicleType");
 
   const timeSlots = [
     "08:00 - 10:00",
@@ -77,6 +79,51 @@ const Quotations = () => {
     "Medical Supplies",
     "Other"
   ];
+
+  const vehicles = [
+    {
+      name: "Small Van",
+      description: "Perfect solution for urgent, light-load deliveries. Designed for agility and efficiency, ideal for navigating busy city streets.",
+      uses: ["Documents", "Large heavy boxes", "Small office items", "Furniture"],
+      maxSize: "1.4m L x 1.2m W x 1.0m H",
+      maxWeight: "400kg",
+      icon: Package,
+    },
+    {
+      name: "SWB Van (Short Wheelbase)",
+      description: "Versatile workhorse offering more space while retaining excellent maneuverability. Great balance of capacity and agility.",
+      uses: ["Palletized goods", "Couple of euro pallets", "Small-scale commercial deliveries", "White goods"],
+      maxSize: "2.0m L x 1.2m W x 1.2m H",
+      maxWeight: "800kg",
+      icon: Truck,
+    },
+    {
+      name: "LWB Van (Long Wheelbase)",
+      description: "Built for consignments that require significant space. Capable of carrying up to three pallets and excellent for long items.",
+      uses: ["Building materials", "Medium-sized residential moves", "Office moves", "Long items"],
+      maxSize: "3.0m L x 1.2m W x 1.7m H", 
+      maxWeight: "1100kg",
+      icon: Truck,
+    },
+    {
+      name: "XLWB Van (Extra-Long Wheelbase)",
+      description: "Maximum capacity solution providing extensive loading area. Perfect for high-volume loads and full-pallet consignments.",
+      uses: ["Large-scale construction deliveries", "Retail deliveries", "Full-pallet consignments", "Bulk transport"],
+      maxSize: "4.0m L x 1.36m W x 1.79m H",
+      maxWeight: "1100kg", 
+      icon: Truck,
+    },
+    {
+      name: "Luton Van",
+      description: "Specifically designed for bulkier items and removals. Box-shaped body provides maximum usable space with tail lift for easy loading.",
+      uses: ["House removals", "Office removals", "Large furniture deliveries", "Large-scale consignments"],
+      maxSize: "4.0m L x 2.0m W x 2.0m H",
+      maxWeight: "800kg",
+      icon: Truck,
+    }
+  ];
+
+  const selectedVehicle = vehicles.find(v => v.name === watchedVehicleType);
 
   const onSubmit = async (data: BookingFormData) => {
     try {
@@ -340,6 +387,94 @@ const Quotations = () => {
                         )}
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Vehicle Selection Card */}
+                <div className="bg-card rounded-xl border border-border shadow-sm">
+                  <div className="p-6 border-b border-border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Truck className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-card-foreground">Choose Your Vehicle</h3>
+                        <p className="text-sm text-muted-foreground">Select the right vehicle for your delivery</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-6">
+                    <div className="space-y-3">
+                      <Label className="text-sm font-medium">Vehicle Type</Label>
+                      <Select onValueChange={(value) => setValue("vehicleType", value)}>
+                        <SelectTrigger className={cn("h-11", errors.vehicleType && "border-destructive")}>
+                          <SelectValue placeholder="Select vehicle type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border border-border shadow-lg z-50">
+                          {vehicles.map((vehicle) => (
+                            <SelectItem key={vehicle.name} value={vehicle.name} className="cursor-pointer">
+                              <div className="flex items-center gap-2">
+                                <vehicle.icon className="w-4 h-4" />
+                                {vehicle.name}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {errors.vehicleType && (
+                        <p className="text-xs text-destructive flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          {errors.vehicleType.message}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Vehicle Information Display */}
+                    {selectedVehicle && (
+                      <div className="bg-muted/50 rounded-lg p-4 space-y-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <selectedVehicle.icon className="w-5 h-5 text-primary" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-card-foreground mb-2">{selectedVehicle.name}</h4>
+                            <p className="text-sm text-muted-foreground mb-3">{selectedVehicle.description}</p>
+                            
+                            {/* Specifications */}
+                            <div className="grid grid-cols-2 gap-3 mb-3">
+                              <div className="flex items-center gap-2 text-sm">
+                                <Ruler className="w-4 h-4 text-primary" />
+                                <div>
+                                  <span className="font-medium">Max Size:</span>
+                                  <br />
+                                  <span className="text-muted-foreground">{selectedVehicle.maxSize}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm">
+                                <Weight className="w-4 h-4 text-primary" />
+                                <div>
+                                  <span className="font-medium">Max Weight:</span>
+                                  <br />
+                                  <span className="text-muted-foreground">{selectedVehicle.maxWeight}</span>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* Common Uses */}
+                            <div>
+                              <p className="text-sm font-medium text-card-foreground mb-2">Commonly used for:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {selectedVehicle.uses.map((use, index) => (
+                                  <Badge key={index} variant="secondary" className="text-xs">
+                                    {use}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
