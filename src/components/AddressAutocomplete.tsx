@@ -34,8 +34,6 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const MAPBOX_TOKEN = 'pk.eyJ1IjoibG92YWJsZS1kZW1vIiwiYSI6ImNsMnZlemtlYzAwcXEzZG1uaWxlbXFtNnIifQ.OKzgqBRcJGR0lQ-6V7x_1A';
-
   useEffect(() => {
     const searchAddresses = async () => {
       if (!value || value.length < 3) {
@@ -46,9 +44,18 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
 
       setIsLoading(true);
       try {
-        const response = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(value)}.json?access_token=${MAPBOX_TOKEN}&country=GB&types=address,postcode&limit=5&autocomplete=true`
-        );
+        const response = await fetch('/api/mapbox-geocoding', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query: value }),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch suggestions');
+        }
+
         const data = await response.json();
         
         if (data.features) {
