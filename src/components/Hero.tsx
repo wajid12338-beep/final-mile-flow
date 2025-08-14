@@ -19,28 +19,28 @@ const Hero = () => {
       <div className="relative z-10 container mx-auto px-6 text-center">
         <div className="max-w-4xl mx-auto space-y-8">
           <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
-            Final-Mile Delivery
-            <span className="block text-logistics-orange">Excellence</span>
+            Fleetory: Nationwide 
+            <span className="block text-logistics-orange">Same-Day Courier</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-            Professional same-day and final-mile delivery services across the UK. 
-            Available 24/7, 365 days a year.
+            From an urgent envelope to a few pallets, Fleetory has you covered. Based in Derby, 
+            our central logistics hub expertly manages comprehensive same-day delivery solutions 24/7, 365 days a year.
           </p>
 
           {/* Key Features */}
           <div className="flex flex-wrap justify-center gap-6 md:gap-8 text-white/90">
             <div className="flex items-center gap-2">
               <Clock className="h-6 w-6 text-logistics-orange" />
-              <span className="font-semibold">24/7 Service</span>
+              <span className="font-semibold">60-Minute Collection</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="h-6 w-6 text-logistics-orange" />
-              <span className="font-semibold">UK-Wide Coverage</span>
+              <span className="font-semibold">Nationwide Service</span>
             </div>
             <div className="flex items-center gap-2">
               <Truck className="h-6 w-6 text-logistics-orange" />
-              <span className="font-semibold">Professional Drivers</span>
+              <span className="font-semibold">Fully Insured</span>
             </div>
           </div>
 
@@ -49,6 +49,7 @@ const Hero = () => {
             <Button 
               size="lg" 
               className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={() => window.location.href = '/quotations'}
             >
               Get Quote Now
             </Button>
@@ -56,6 +57,7 @@ const Hero = () => {
               variant="outline" 
               size="lg"
               className="border-2 border-white text-white hover:bg-white hover:text-logistics-blue font-semibold px-8 py-4 text-lg rounded-full transition-all duration-300"
+              onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
             >
               View Services
             </Button>

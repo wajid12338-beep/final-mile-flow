@@ -12,8 +12,8 @@ const Header = () => {
               <Truck className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-logistics-blue">AZ Same day</h1>
-              <p className="text-xs text-muted-foreground">Final-Mile Excellence</p>
+              <h1 className="text-xl font-bold text-logistics-blue">Fleetory</h1>
+              <p className="text-xs text-muted-foreground">The network that moves you</p>
             </div>
           </div>
 
@@ -22,14 +22,14 @@ const Header = () => {
             <a href="#services" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
               Services
             </a>
-            <a href="#industries" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
-              Industries
+            <a href="/fleet" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
+              Fleet
             </a>
-            <a href="#coverage" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
-              Coverage
-            </a>
-            <a href="#about" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
+            <a href="/about" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
               About
+            </a>
+            <a href="#contact" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium">
+              Contact
             </a>
           </nav>
 
@@ -43,9 +43,9 @@ const Header = () => {
             </Button>
             <Button 
               className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300"
-              onClick={() => window.location.href = '/booking'}
+              onClick={() => window.location.href = '/quotations'}
             >
-              Book Now
+              Get Quote
             </Button>
           </div>
         </div>

@@ -6,21 +6,21 @@ const Services = () => {
   const services = [
     {
       icon: Clock,
-      title: "Same-Day Courier",
-      description: "Urgent deliveries when time is critical. Get your packages delivered the same day with our reliable courier network.",
-      features: ["Time-critical delivery", "Real-time tracking", "Proof of delivery", "Nationwide coverage"],
+      title: "Standard Same Day Delivery",
+      description: "Guaranteed Same Day Arrival - No Delays. Perfect for time-sensitive shipments that need to arrive by the end of the day.",
+      features: ["Rapid collection (usually within 60 minutes)", "Direct delivery with drivers tracked from start to finish", "POD (Proof of Delivery) provided immediately", "Legal documents, business parcels, urgent stock items"],
     },
     {
       icon: MapPin,
-      title: "Multi-Drop Courier",
-      description: "Efficient multiple-stop deliveries in a single journey. Perfect for businesses with multiple delivery locations.",
-      features: ["Multiple stops", "Route optimization", "Cost-effective", "Flexible scheduling"],
+      title: "Timed Delivery",
+      description: "When your delivery has a deadline - we make it happen. Ideal when your package must arrive at a specific time.",
+      features: ["Scheduled pickup and drop-off", "Guaranteed time-slot delivery", "Ideal for coordinated logistics", "Medical supplies, installation teams, event deliveries"],
     },
     {
       icon: Truck,
-      title: "Van Day Rate Service",
-      description: "Hire our professional courier crews by the day. Available with 1 or 2-man teams for maximum flexibility.",
-      features: ["Full day hire", "1 or 2-man crews", "Professional drivers", "Flexible solutions"],
+      title: "Heavy Haulage & Specialist Deliveries",
+      description: "Oversized, palletised, or high-value goods — handled with care. Wide range of vehicle options and professional handling.",
+      features: ["Motorcycle to Luton Van options", "Tail-lift access (where required)", "Goods in Transit insurance", "Fragile equipment or household goods"],
     },
   ];
 
@@ -28,12 +28,12 @@ const Services = () => {
     <section className="py-20 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Our Core Services
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6" id="services">
+            Our Services
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed">
-            Professional delivery solutions tailored to your business needs. 
-            From urgent same-day deliveries to flexible van hire services.
+            We're proud to offer a nationwide same-day courier service. Thanks to our extensive network of drivers, 
+            we can guarantee a collection anywhere in the UK within 60 minutes of your booking.
           </p>
         </div>
 
@@ -66,8 +66,9 @@ const Services = () => {
                 <Button 
                   variant="outline" 
                   className="w-full mt-6 border-logistics-blue text-logistics-blue hover:bg-logistics-blue hover:text-white transition-all duration-300"
+                  onClick={() => window.location.href = '/quotations'}
                 >
-                  Learn More
+                  Get Quote
                 </Button>
               </CardContent>
             </Card>

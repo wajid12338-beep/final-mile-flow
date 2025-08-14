@@ -8,15 +8,15 @@ import { Phone, Mail, Clock, MapPin } from "lucide-react";
 
 const Contact = () => {
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-background" id="contact">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Get Your Quote
+            Contact Us
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed">
-            Ready to experience reliable delivery? Contact us for a personalized quote 
-            or book your delivery service today.
+            We are based in Derby, East Midlands however we provide service nationwide. 
+            We are happy to go into the busiest parts of major cities and also those small remote villages up in the district or by the sea sides.
           </p>
         </div>
 
@@ -79,6 +79,7 @@ const Contact = () => {
 
               <Button 
                 className="w-full bg-logistics-blue hover:bg-logistics-blue-light text-white font-semibold py-3 text-lg rounded-lg transition-all duration-300"
+                onClick={() => window.location.href = '/quotations'}
               >
                 Send Quote Request
               </Button>

@@ -12,13 +12,13 @@ const Footer = () => {
                 <Truck className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold">AZ Same day</h3>
-                <p className="text-sm text-white/70">Final-Mile Excellence</p>
+                <h3 className="text-xl font-bold">Fleetory</h3>
+                <p className="text-sm text-white/70">The network that moves you</p>
               </div>
             </div>
             <p className="text-white/80 leading-relaxed">
-              Professional final-mile and same-day delivery services across the UK. 
-              Trusted by businesses since 2019.
+              Professional same-day courier services across the UK. 
+              From an urgent envelope to a few pallets, Fleetory has you covered.
             </p>
           </div>
 
@@ -26,21 +26,21 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold">Services</h4>
             <ul className="space-y-2 text-white/80">
-              <li><a href="#" className="hover:text-logistics-orange transition-colors duration-200">Same-Day Courier</a></li>
-              <li><a href="#" className="hover:text-logistics-orange transition-colors duration-200">Multi-Drop Delivery</a></li>
-              <li><a href="#" className="hover:text-logistics-orange transition-colors duration-200">Van Day Rate Service</a></li>
-              <li><a href="#" className="hover:text-logistics-orange transition-colors duration-200">White Glove Delivery</a></li>
+              <li><a href="#services" className="hover:text-logistics-orange transition-colors duration-200">Standard Same Day Delivery</a></li>
+              <li><a href="#services" className="hover:text-logistics-orange transition-colors duration-200">Timed Delivery</a></li>
+              <li><a href="#services" className="hover:text-logistics-orange transition-colors duration-200">Heavy Haulage</a></li>
+              <li><a href="#services" className="hover:text-logistics-orange transition-colors duration-200">Bespoke Logistics Solutions</a></li>
             </ul>
           </div>
 
-          {/* Industries */}
+          {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Industries</h4>
+            <h4 className="text-lg font-semibold">Quick Links</h4>
             <ul className="space-y-2 text-white/80">
-              <li><a href="#" className="hover:text-logistics-orange transition-colors duration-200">Retail</a></li>
-              <li><a href="#" className="hover:text-logistics-orange transition-colors duration-200">Healthcare</a></li>
-              <li><a href="#" className="hover:text-logistics-orange transition-colors duration-200">Food & Beverage</a></li>
-              <li><a href="#" className="hover:text-logistics-orange transition-colors duration-200">Aerospace & Automotive</a></li>
+              <li><a href="/fleet" className="hover:text-logistics-orange transition-colors duration-200">Fleet</a></li>
+              <li><a href="/about" className="hover:text-logistics-orange transition-colors duration-200">About Us</a></li>
+              <li><a href="/quotations" className="hover:text-logistics-orange transition-colors duration-200">Get Quote</a></li>
+              <li><a href="#contact" className="hover:text-logistics-orange transition-colors duration-200">Contact</a></li>
             </ul>
           </div>
 
@@ -71,7 +71,7 @@ const Footer = () => {
         <div className="border-t border-white/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-white/60 text-sm">
-              © 2024 AZ Same day. All rights reserved.
+              © 2024 Fleetory. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm text-white/60">
               <a href="#" className="hover:text-logistics-orange transition-colors duration-200">Privacy Policy</a>

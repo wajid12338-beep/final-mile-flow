@@ -86,7 +86,7 @@ const Quotations = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Generate mock booking reference
-      const reference = `AZ${Date.now().toString().slice(-6)}`;
+      const reference = `FL${Date.now().toString().slice(-6)}`;
       setBookingReference(reference);
       setIsSubmitted(true);
       
@@ -114,7 +114,7 @@ const Quotations = () => {
               <CardContent className="space-y-4">
                 <div className="text-center">
                   <p className="text-green-700 mb-4">
-                    Your booking has been successfully created. We'll contact you shortly with pricing and confirmation details.
+                    Your booking has been successfully created. Once your booking is confirmed, we'll dispatch the nearest available driver. We aim to collect your shipment within 60 minutes.
                   </p>
                   <div className="bg-white p-4 rounded-lg border border-green-200">
                     <Label className="text-sm font-medium text-green-800">Booking Reference</Label>
@@ -165,9 +165,10 @@ const Quotations = () => {
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-6 max-w-4xl">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Get Your Quote</h1>
+            <h1 className="text-4xl font-bold text-foreground mb-4">Instant Quote & Booking</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Create your logistics booking in minutes. Fill out the form below and we'll provide you with a detailed quote.
+              Don't wait — get your delivery on the road in minutes. Enter your collection and delivery details, 
+              get an instant price, and book your driver right now.
             </p>
           </div>
 
