@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect, useRef } from 'react';
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { MapPin, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,6 +17,7 @@ interface AddressAutocompleteProps {
   placeholder?: string;
   className?: string;
   error?: boolean;
+  id?: string;
 }
 
 const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
@@ -26,14 +26,15 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
   onSelect,
   placeholder,
   className,
-  error
+  error,
+  id
 }) => {
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [apiError, setApiError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const suggestionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       try {
         console.log('Attempting to fetch suggestions for:', value);
         
-        // Try the Supabase edge function first
+        // Call the Supabase edge function
         const response = await fetch('/functions/v1/mapbox-geocoding', {
           method: 'POST',
           headers: {
@@ -63,26 +64,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
         console.log('Response status:', response.status);
         
         if (!response.ok) {
-          // If edge function fails, fall back to direct Mapbox API call
-          console.log('Edge function failed, falling back to direct API call');
-          
-          const fallbackResponse = await fetch(
-            `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(value)}.json?access_token=pk.eyJ1IjoibG92YWJsZS1kZW1vIiwiYSI6ImNsMnZlemtlYzAwcXEzZG1uaWxlbXFtNnIifQ.OKzgqBRcJGR0lQ-6V7x_1A&country=GB&types=address,postcode&limit=5`
-          );
-          
-          if (!fallbackResponse.ok) {
-            throw new Error('Both edge function and direct API failed');
-          }
-          
-          const data = await fallbackResponse.json();
-          console.log('Fallback API response:', data);
-          
-          if (data.features) {
-            setSuggestions(data.features);
-            setShowSuggestions(true);
-            setSelectedIndex(-1);
-          }
-          return;
+          throw new Error(`API request failed with status: ${response.status}`);
         }
 
         const data = await response.json();
@@ -109,7 +91,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
     return () => clearTimeout(timeoutId);
   }, [value]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value);
     setApiError(null);
   };
@@ -166,23 +148,25 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
   return (
     <div className="relative">
       <div className="relative">
-        <Input
-          ref={inputRef}
+        <Textarea
+          ref={textareaRef}
+          id={id}
           value={value}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
           onFocus={handleFocus}
           placeholder={placeholder}
-          className={cn(className, error && "border-destructive")}
+          className={cn("min-h-[100px] resize-none", className, error && "border-destructive focus-visible:ring-destructive")}
+          rows={4}
         />
         {isLoading && (
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+          <div className="absolute right-3 top-3">
             <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
           </div>
         )}
         {apiError && !isLoading && (
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+          <div className="absolute right-3 top-3">
             <AlertCircle className="w-4 h-4 text-destructive" />
           </div>
         )}
@@ -200,22 +184,22 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       )}
 
       {showSuggestions && suggestions.length > 0 && !apiError && (
-        <Card className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto shadow-lg">
+        <Card className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto shadow-lg bg-background border border-border">
           <div className="p-1">
             {suggestions.map((suggestion, index) => (
               <div
                 key={suggestion.id}
                 ref={el => suggestionRefs.current[index] = el}
                 className={cn(
-                  "flex items-center gap-2 p-3 cursor-pointer rounded-md text-sm transition-colors",
+                  "flex items-start gap-3 p-3 cursor-pointer rounded-md text-sm transition-colors",
                   index === selectedIndex 
                     ? "bg-accent text-accent-foreground" 
                     : "hover:bg-accent/50"
                 )}
                 onClick={() => handleSuggestionClick(suggestion)}
               >
-                <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                <span className="truncate">{suggestion.place_name}</span>
+                <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                <span className="text-left leading-tight">{suggestion.place_name}</span>
               </div>
             ))}
           </div>
