@@ -3,6 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { MapPin, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 interface AddressSuggestion {
   id: string;
@@ -52,29 +53,22 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       try {
         console.log('Attempting to fetch suggestions for:', value);
         
-        // Call the Supabase edge function
-        const response = await fetch('/functions/v1/mapbox-geocoding', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ query: value }),
+        // Call the Supabase edge function using the correct approach
+        const { data, error } = await supabase.functions.invoke('mapbox-geocoding', {
+          body: { query: value }
         });
 
-        console.log('Response status:', response.status);
+        console.log('Edge function response:', { data, error });
         
-        if (!response.ok) {
-          throw new Error(`API request failed with status: ${response.status}`);
+        if (error) {
+          throw new Error(error.message || 'Edge function error');
         }
-
-        const data = await response.json();
-        console.log('Edge function response:', data);
         
-        if (data.features) {
+        if (data && data.features) {
           setSuggestions(data.features);
           setShowSuggestions(true);
           setSelectedIndex(-1);
-        } else if (data.error) {
+        } else if (data && data.error) {
           setApiError(data.error);
           console.error('API Error:', data.error);
         }
