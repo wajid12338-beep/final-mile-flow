@@ -52,11 +52,16 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       try {
         console.log('Attempting to fetch suggestions for:', value);
         
-        // For Lovable projects, we need to check if there's a direct way to call the edge function
-        // First try the standard Supabase edge function endpoint pattern
+        // Temporarily disable API calls to prevent errors
+        // This is a fallback while we fix the endpoint
+        setApiError('Address suggestions temporarily disabled');
+        setSuggestions([]);
+        setShowSuggestions(false);
+        
+        // TODO: Re-enable API calls once endpoint is fixed
+        /*
         let response;
         try {
-          // Try the standard edge function endpoint
           response = await fetch(`${window.location.origin}/api/functions/mapbox-geocoding`, {
             method: 'POST',
             headers: {
@@ -65,7 +70,6 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
             body: JSON.stringify({ query: value }),
           });
         } catch (firstError) {
-          // If that fails, try alternative endpoint patterns
           console.log('First endpoint failed, trying alternative...');
           response = await fetch(`/functions/v1/mapbox-geocoding`, {
             method: 'POST',
@@ -93,6 +97,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
           setApiError(data.error);
           console.error('API Error:', data.error);
         }
+        */
       } catch (error) {
         console.error('Error fetching address suggestions:', error);
         setApiError('Unable to fetch address suggestions. Please try again.');
