@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { MapPin, Loader2 } from "lucide-react";
+import { MapPin, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AddressSuggestion {
@@ -31,6 +32,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [apiError, setApiError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -39,11 +41,17 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       if (!value || value.length < 3) {
         setSuggestions([]);
         setShowSuggestions(false);
+        setApiError(null);
         return;
       }
 
       setIsLoading(true);
+      setApiError(null);
+      
       try {
+        console.log('Attempting to fetch suggestions for:', value);
+        
+        // Try the Supabase edge function first
         const response = await fetch('/functions/v1/mapbox-geocoding', {
           method: 'POST',
           headers: {
@@ -51,20 +59,46 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
           },
           body: JSON.stringify({ query: value }),
         });
+
+        console.log('Response status:', response.status);
         
         if (!response.ok) {
-          throw new Error('Failed to fetch suggestions');
+          // If edge function fails, fall back to direct Mapbox API call
+          console.log('Edge function failed, falling back to direct API call');
+          
+          const fallbackResponse = await fetch(
+            `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(value)}.json?access_token=pk.eyJ1IjoibG92YWJsZS1kZW1vIiwiYSI6ImNsMnZlemtlYzAwcXEzZG1uaWxlbXFtNnIifQ.OKzgqBRcJGR0lQ-6V7x_1A&country=GB&types=address,postcode&limit=5`
+          );
+          
+          if (!fallbackResponse.ok) {
+            throw new Error('Both edge function and direct API failed');
+          }
+          
+          const data = await fallbackResponse.json();
+          console.log('Fallback API response:', data);
+          
+          if (data.features) {
+            setSuggestions(data.features);
+            setShowSuggestions(true);
+            setSelectedIndex(-1);
+          }
+          return;
         }
 
         const data = await response.json();
+        console.log('Edge function response:', data);
         
         if (data.features) {
           setSuggestions(data.features);
           setShowSuggestions(true);
           setSelectedIndex(-1);
+        } else if (data.error) {
+          setApiError(data.error);
+          console.error('API Error:', data.error);
         }
       } catch (error) {
         console.error('Error fetching address suggestions:', error);
+        setApiError('Unable to fetch address suggestions. Please try again.');
         setSuggestions([]);
       } finally {
         setIsLoading(false);
@@ -77,6 +111,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
+    setApiError(null);
   };
 
   const handleSuggestionClick = (suggestion: AddressSuggestion) => {
@@ -146,9 +181,25 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
             <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
           </div>
         )}
+        {apiError && !isLoading && (
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+            <AlertCircle className="w-4 h-4 text-destructive" />
+          </div>
+        )}
       </div>
 
-      {showSuggestions && suggestions.length > 0 && (
+      {apiError && (
+        <div className="absolute top-full left-0 right-0 z-50 mt-1">
+          <Card className="border-destructive bg-destructive/5">
+            <div className="p-3 text-sm text-destructive flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              {apiError}
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {showSuggestions && suggestions.length > 0 && !apiError && (
         <Card className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto shadow-lg">
           <div className="p-1">
             {suggestions.map((suggestion, index) => (
