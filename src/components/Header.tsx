@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Truck } from "lucide-react";
 
 const Header = () => {
   return (
@@ -8,8 +7,8 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200">
-            <div className="w-10 h-10 bg-gradient-to-br from-logistics-blue to-logistics-blue-light rounded-lg flex items-center justify-center">
-              <Truck className="h-6 w-6 text-white" />
+            <div className="w-12 h-12 flex items-center justify-center">
+              <img src="/lovable-uploads/4d1ca312-1fa6-4205-9ba7-717a631fe2fe.png" alt="Fleetory Logo" className="h-10 w-auto" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-logistics-blue">Fleetory</h1>

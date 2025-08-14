@@ -1,113 +1,98 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShoppingBag, Heart, Utensils, Plane, Calendar, Package } from "lucide-react";
-import ukCoverageImage from "@/assets/uk-coverage.jpg";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Building2, Heart, Gavel, ShoppingBag, Wrench, Home } from "lucide-react";
 
 const Industries = () => {
   const industries = [
     {
-      icon: ShoppingBag,
-      title: "Retail",
-      description: "Fast last-mile delivery for retail chains and e-commerce businesses.",
-    },
-    {
       icon: Heart,
-      title: "Healthcare",
-      description: "Secure, temperature-controlled delivery for medical supplies and pharmaceuticals.",
+      title: "Healthcare & Medical",
+      description: "Urgent medical supply deliveries, pharmaceutical transport, and laboratory sample collection with temperature-controlled options.",
+      services: ["Medical equipment delivery", "Pharmaceutical transport", "Laboratory samples", "Emergency medical supplies"]
     },
     {
-      icon: Utensils,
-      title: "Food & Beverage",
-      description: "Fresh food delivery with proper handling and temperature management.",
+      icon: Gavel,
+      title: "Legal Services",
+      description: "Time-critical legal document delivery, court filing services, and confidential document transport with proof of delivery.",
+      services: ["Court document filing", "Contract delivery", "Evidence transport", "Confidential legal papers"]
     },
     {
-      icon: Plane,
-      title: "Aerospace & Automotive",
-      description: "Specialized handling for high-value components and parts.",
+      icon: Building2,
+      title: "Construction & Trade",
+      description: "Building material deliveries, tool transport, and site-to-site logistics for construction projects across the UK.",
+      services: ["Building materials", "Tool deliveries", "Equipment transport", "Site logistics"]
     },
     {
-      icon: Calendar,
-      title: "Events & Marketing",
-      description: "Time-critical delivery for events, exhibitions, and marketing campaigns.",
+      icon: ShoppingBag,
+      title: "Retail & E-commerce",
+      description: "Last-mile delivery solutions, inventory restocking, and urgent retail deliveries to keep your customers satisfied.",
+      services: ["Inventory restocking", "Customer deliveries", "Store transfers", "Returns collection"]
     },
     {
-      icon: Package,
-      title: "Wholesale Distribution",
-      description: "Bulk delivery solutions for distributors and manufacturers.",
+      icon: Wrench,
+      title: "Manufacturing",
+      description: "Just-in-time parts delivery, equipment transport, and supply chain support for manufacturing operations.",
+      services: ["Parts delivery", "Equipment transport", "Supply chain support", "Factory-to-factory transfer"]
     },
+    {
+      icon: Home,
+      title: "Residential Services",
+      description: "House removals, furniture delivery, and personal item transport with care and professionalism.",
+      services: ["House removals", "Furniture delivery", "Personal belongings", "Appliance transport"]
+    }
   ];
 
   return (
-    <section className="py-20 bg-logistics-gray">
+    <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Industry Expertise
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-logistics-blue mb-4">
+            Industries We Serve
           </h2>
-          <p className="text-xl text-muted-foreground leading-relaxed">
-            Specialized logistics solutions tailored to the unique requirements 
-            of different industries and sectors.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            From healthcare to construction, legal to retail - Fleetory provides specialized same-day courier services 
+            tailored to meet the unique demands of every industry across the UK.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {industries.map((industry, index) => (
-            <Card 
-              key={index}
-              className="group hover:shadow-lg transition-all duration-300 bg-white border-0 hover:border-logistics-orange/20 hover:-translate-y-1"
-            >
-              <CardHeader className="text-center pb-4">
-                <div className="mx-auto w-14 h-14 bg-gradient-to-br from-logistics-orange to-logistics-orange-light rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <industry.icon className="h-7 w-7 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold text-foreground group-hover:text-logistics-blue transition-colors duration-300">
-                  {industry.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground text-center leading-relaxed">
-                  {industry.description}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {industries.map((industry, index) => {
+            const IconComponent = industry.icon;
+            return (
+              <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-logistics-orange to-logistics-orange-light rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className="h-8 w-8 text-white" />
+                  </div>
+                  <CardTitle className="text-xl text-logistics-blue">{industry.title}</CardTitle>
+                  <CardDescription className="text-gray-600">
+                    {industry.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {industry.services.map((service, serviceIndex) => (
+                      <li key={serviceIndex} className="flex items-center text-sm text-gray-600">
+                        <div className="w-2 h-2 bg-logistics-orange rounded-full mr-3 flex-shrink-0"></div>
+                        {service}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
-        {/* Coverage Area */}
-        <div className="mt-20">
-          <div className="bg-white rounded-2xl p-8 md:p-12 shadow-lg">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-                  Nationwide UK Coverage
-                </h3>
-                <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                  From Scotland to Cornwall, our comprehensive delivery network 
-                  ensures reliable service across the entire United Kingdom.
-                </p>
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-logistics-orange rounded-full mr-4" />
-                    <span className="text-foreground font-medium">Complete UK mainland coverage</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-logistics-orange rounded-full mr-4" />
-                    <span className="text-foreground font-medium">Major city and rural area delivery</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-logistics-orange rounded-full mr-4" />
-                    <span className="text-foreground font-medium">Strategic depot locations</span>
-                  </div>
-                </div>
-              </div>
-              <div className="relative">
-                <img
-                  src={ukCoverageImage}
-                  alt="UK delivery coverage map"
-                  className="w-full h-auto rounded-xl shadow-lg"
-                />
-              </div>
-            </div>
-          </div>
+        <div className="text-center mt-12">
+          <p className="text-lg text-gray-600 mb-6">
+            Don't see your industry? We serve businesses of all types across the UK.
+          </p>
+          <a 
+            href="/quotations" 
+            className="inline-flex items-center px-8 py-3 bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold rounded-lg transition-colors duration-300"
+          >
+            Get Your Custom Quote
+          </a>
         </div>
       </div>
     </section>

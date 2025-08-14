@@ -76,6 +76,21 @@ const Fleet = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {vehicles.map((vehicle, index) => (
               <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-2 hover:border-logistics-orange/20">
+                {/* Vehicle Image */}
+                <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6">
+                  <img 
+                    src={`/lovable-uploads/${
+                      vehicle.name === "Small Van" ? "f6cc7025-4c20-4dbe-9fd8-da4515ef257f.png" :
+                      vehicle.name === "SWB Van (Short Wheelbase)" ? "85d5e9c1-6138-4b1b-ba63-919353011d9a.png" :
+                      vehicle.name === "LWB Van (Long Wheelbase)" ? "7a962052-9d41-4558-b738-44e4d101da0b.png" :
+                      vehicle.name === "XLWB Van (Extra-Long Wheelbase)" ? "8b983107-7a5a-463b-93c2-cac0be717589.png" :
+                      "9efa9a16-c6d9-430a-a9dc-f56feb0d8888.png"
+                    }`}
+                    alt={`${vehicle.name} - Fleetory Courier Service`}
+                    className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                
                 <CardHeader>
                   <div className="flex items-center space-x-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-logistics-blue to-logistics-blue-light rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">

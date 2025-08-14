@@ -1,4 +1,4 @@
-import { Truck, Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -8,8 +8,8 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-logistics-orange to-logistics-orange-light rounded-lg flex items-center justify-center">
-                <Truck className="h-6 w-6 text-white" />
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img src="/lovable-uploads/4d1ca312-1fa6-4205-9ba7-717a631fe2fe.png" alt="Fleetory Logo" className="h-10 w-auto" />
               </div>
               <div>
                 <h3 className="text-xl font-bold">Fleetory</h3>
