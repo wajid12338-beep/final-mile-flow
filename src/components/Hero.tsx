@@ -51,15 +51,15 @@ const Hero = () => {
               className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
               onClick={() => window.location.href = '/quotations'}
             >
-              Get Quote Now
+              Get a Quote
             </Button>
             <Button 
               variant="outline" 
               size="lg"
               className="border-2 border-white text-white hover:bg-white hover:text-logistics-blue font-semibold px-8 py-4 text-lg rounded-full transition-all duration-300"
-              onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => window.location.href = '#contact'}
             >
-              View Services
+              Request Call Back
             </Button>
           </div>
         </div>

@@ -25,10 +25,10 @@ const Contact = () => {
           <Card className="border-2 border-border">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-foreground">
-                Request a Quote
+                Request Call Back
               </CardTitle>
               <CardDescription className="text-base">
-                Fill out the form below and we'll get back to you within 2 hours during business hours.
+                Fill out the form below and a specialist will call you back within 2 hours during business hours.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -79,9 +79,8 @@ const Contact = () => {
 
               <Button 
                 className="w-full bg-logistics-blue hover:bg-logistics-blue-light text-white font-semibold py-3 text-lg rounded-lg transition-all duration-300"
-                onClick={() => window.location.href = '/quotations'}
               >
-                Send Quote Request
+                Request Call Back
               </Button>
             </CardContent>
           </Card>

@@ -64,11 +64,10 @@ const Services = () => {
                   ))}
                 </ul>
                 <Button 
-                  variant="outline" 
-                  className="w-full mt-6 border-logistics-blue text-logistics-blue hover:bg-logistics-blue hover:text-white transition-all duration-300"
+                  className="w-full mt-6 bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300"
                   onClick={() => window.location.href = '/quotations'}
                 >
-                  Get Quote
+                  Get a Quote
                 </Button>
               </CardContent>
             </Card>
@@ -91,8 +90,9 @@ const Services = () => {
             <Button 
               size="lg"
               className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={() => window.location.href = '#contact'}
             >
-              Request Emergency Delivery
+              Request Call Back
             </Button>
           </div>
         </div>

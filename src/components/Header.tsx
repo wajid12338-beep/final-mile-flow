@@ -100,8 +100,9 @@ const Header = () => {
             <Button 
               variant="outline" 
               className="hidden sm:inline-flex border-logistics-blue text-logistics-blue hover:bg-logistics-blue hover:text-white transition-all duration-300"
+              onClick={() => window.location.href = '#contact'}
             >
-              Track Delivery
+              Request Call Back
             </Button>
             <Button 
               className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300"
