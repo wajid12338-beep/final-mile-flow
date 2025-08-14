@@ -43,9 +43,9 @@ const Header = () => {
             </Button>
             <Button 
               className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300"
-              onClick={() => window.location.href = '/quotations'}
+              onClick={() => window.location.href = '/booking'}
             >
-              Get Quote
+              Book Now
             </Button>
           </div>
         </div>
