@@ -3,7 +3,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { MapPin, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/lib/supabase";
 
 interface AddressSuggestion {
   id: string;
@@ -53,16 +52,38 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       try {
         console.log('Attempting to fetch suggestions for:', value);
         
-        // Call the Supabase edge function using the correct approach
-        const { data, error } = await supabase.functions.invoke('mapbox-geocoding', {
-          body: { query: value }
-        });
-
-        console.log('Edge function response:', { data, error });
-        
-        if (error) {
-          throw new Error(error.message || 'Edge function error');
+        // For Lovable projects, we need to check if there's a direct way to call the edge function
+        // First try the standard Supabase edge function endpoint pattern
+        let response;
+        try {
+          // Try the standard edge function endpoint
+          response = await fetch(`${window.location.origin}/api/functions/mapbox-geocoding`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query: value }),
+          });
+        } catch (firstError) {
+          // If that fails, try alternative endpoint patterns
+          console.log('First endpoint failed, trying alternative...');
+          response = await fetch(`/functions/v1/mapbox-geocoding`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query: value }),
+          });
         }
+
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`API request failed with status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('API response:', data);
         
         if (data && data.features) {
           setSuggestions(data.features);
