@@ -13,7 +13,8 @@ const Fleet = () => {
       uses: ["Documents", "Large heavy boxes", "Small office items", "Furniture"],
       maxSize: "1.4m L x 1.2m W x 1.0m H",
       maxWeight: "400kg",
-      icon: Package
+      icon: Package,
+      image: "/lovable-uploads/f6cc7025-4c20-4dbe-9fd8-da4515ef257f.png"
     },
     {
       name: "SWB Van (Short Wheelbase)",
@@ -21,7 +22,8 @@ const Fleet = () => {
       uses: ["Palletized goods", "Couple of euro pallets", "Small-scale commercial deliveries", "White goods"],
       maxSize: "2.0m L x 1.2m W x 1.2m H",
       maxWeight: "800kg",
-      icon: Truck
+      icon: Truck,
+      image: "/lovable-uploads/85d5e9c1-6138-4b1b-ba63-919353011d9a.png"
     },
     {
       name: "LWB Van (Long Wheelbase)",
@@ -29,7 +31,8 @@ const Fleet = () => {
       uses: ["Building materials", "Medium-sized residential moves", "Office moves", "Long items"],
       maxSize: "3.0m L x 1.2m W x 1.7m H", 
       maxWeight: "1100kg",
-      icon: Truck
+      icon: Truck,
+      image: "/lovable-uploads/7a962052-9d41-4558-b738-44e4d101da0b.png"
     },
     {
       name: "XLWB Van (Extra-Long Wheelbase)",
@@ -37,7 +40,8 @@ const Fleet = () => {
       uses: ["Large-scale construction deliveries", "Retail deliveries", "Full-pallet consignments", "Bulk transport"],
       maxSize: "4.0m L x 1.36m W x 1.79m H",
       maxWeight: "1100kg", 
-      icon: Truck
+      icon: Truck,
+      image: "/lovable-uploads/8b983107-7a5a-463b-93c2-cac0be717589.png"
     },
     {
       name: "Luton Van",
@@ -45,7 +49,8 @@ const Fleet = () => {
       uses: ["House removals", "Office removals", "Large furniture deliveries", "Large-scale consignments"],
       maxSize: "4.0m L x 2.0m W x 2.0m H",
       maxWeight: "800kg",
-      icon: Truck
+      icon: Truck,
+      image: "/lovable-uploads/9efa9a16-c6d9-430a-a9dc-f56feb0d8888.png"
     }
   ];
 
@@ -79,15 +84,13 @@ const Fleet = () => {
                 {/* Vehicle Image */}
                 <div className="aspect-video bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-6">
                   <img 
-                    src={`/lovable-uploads/${
-                      vehicle.name === "Small Van" ? "f6cc7025-4c20-4dbe-9fd8-da4515ef257f.png" :
-                      vehicle.name === "SWB Van (Short Wheelbase)" ? "85d5e9c1-6138-4b1b-ba63-919353011d9a.png" :
-                      vehicle.name === "LWB Van (Long Wheelbase)" ? "7a962052-9d41-4558-b738-44e4d101da0b.png" :
-                      vehicle.name === "XLWB Van (Extra-Long Wheelbase)" ? "8b983107-7a5a-463b-93c2-cac0be717589.png" :
-                      "9efa9a16-c6d9-430a-a9dc-f56feb0d8888.png"
-                    }`}
+                    src={vehicle.image}
                     alt={`${vehicle.name} - Fleetory Courier Service`}
                     className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      console.log(`Failed to load image: ${vehicle.image}`);
+                      e.currentTarget.style.display = 'none';
+                    }}
                   />
                 </div>
                 
