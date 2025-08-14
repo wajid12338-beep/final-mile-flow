@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowRight, Info, CheckCircle, MapPin, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { calculateDistance, geocodeAddress, calculatePricing } from "@/utils/pricingUtils";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
 import RouteMap from "@/components/RouteMap";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -70,6 +71,15 @@ const Booking = () => {
       acceptTerms: false,
     }
   });
+
+  // Handle address selection from autocomplete
+  const handlePickupSelect = (coords: { lat: number; lng: number }) => {
+    setPickupCoords(coords);
+  };
+
+  const handleDeliverySelect = (coords: { lat: number; lng: number }) => {
+    setDeliveryCoords(coords);
+  };
 
 
   const watchedCollectFrom = watch("collectFrom");
@@ -205,10 +215,13 @@ const Booking = () => {
                     <div className="flex items-center gap-4">
                       <div className="flex-1">
                         <Label className="text-sm font-medium text-foreground">*Collect From</Label>
-                        <Input
-                          placeholder="Collection address with postcode"
+                        <AddressAutocomplete
+                          value={watchedCollectFrom || ""}
+                          onChange={(value) => setValue("collectFrom", value)}
+                          onSelect={handlePickupSelect}
+                          placeholder="Start typing collection address or postcode..."
                           className={cn("mt-1", errors.collectFrom && "border-destructive")}
-                          {...register("collectFrom")}
+                          error={!!errors.collectFrom}
                         />
                         {errors.collectFrom && (
                           <p className="text-sm text-destructive mt-1">{errors.collectFrom.message}</p>
@@ -219,10 +232,13 @@ const Booking = () => {
                       
                       <div className="flex-1">
                         <Label className="text-sm font-medium text-foreground">*Deliver To</Label>
-                        <Input
-                          placeholder="Delivery address with postcode"
+                        <AddressAutocomplete
+                          value={watchedDeliverTo || ""}
+                          onChange={(value) => setValue("deliverTo", value)}
+                          onSelect={handleDeliverySelect}
+                          placeholder="Start typing delivery address or postcode..."
                           className={cn("mt-1", errors.deliverTo && "border-destructive")}
-                          {...register("deliverTo")}
+                          error={!!errors.deliverTo}
                         />
                         {errors.deliverTo && (
                           <p className="text-sm text-destructive mt-1">{errors.deliverTo.message}</p>
