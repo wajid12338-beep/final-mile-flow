@@ -8,16 +8,13 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="p-8">
-        <h1 className="text-4xl font-bold text-black mb-4">Fleetory Courier Service</h1>
-        <p className="text-lg text-gray-600">Professional same-day courier services across the UK.</p>
-        <div className="mt-8">
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg">
-            Test Button
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen">
+      <Header />
+      <Hero />
+      <Services />
+      <HowItWorks />
+      <Contact />
+      <Footer />
     </div>
   );
 };

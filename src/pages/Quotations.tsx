@@ -16,7 +16,6 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import AddressAutocomplete from "@/components/AddressAutocomplete";
 
 const bookingSchema = z.object({
   pickupAddress: z.string().min(10, "Please enter a complete pickup address"),
@@ -60,8 +59,6 @@ const Quotations = () => {
   const watchedPickupDate = watch("pickupDate");
   const watchedDeliveryDate = watch("deliveryDate");
   const watchedVehicleType = watch("vehicleType");
-  const watchedPickupAddress = watch("pickupAddress");
-  const watchedDeliveryAddress = watch("deliveryAddress");
 
   const timeSlots = [
     "08:00 - 10:00",
@@ -250,12 +247,11 @@ const Quotations = () => {
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-3">
                         <Label htmlFor="pickupAddress" className="text-sm font-medium">From (Collection Address)</Label>
-                        <AddressAutocomplete
+                        <Textarea
                           id="pickupAddress"
-                          value={watchedPickupAddress || ""}
-                          onChange={(value) => setValue("pickupAddress", value)}
                           placeholder="Enter full collection address including postcode"
-                          error={!!errors.pickupAddress}
+                          className={cn("min-h-[100px] resize-none", errors.pickupAddress && "border-destructive focus-visible:ring-destructive")}
+                          {...register("pickupAddress")}
                         />
                         {errors.pickupAddress && (
                           <p className="text-xs text-destructive flex items-center gap-1">
@@ -267,12 +263,11 @@ const Quotations = () => {
                       
                       <div className="space-y-3">
                         <Label htmlFor="deliveryAddress" className="text-sm font-medium">To (Delivery Address)</Label>
-                        <AddressAutocomplete
+                        <Textarea
                           id="deliveryAddress"
-                          value={watchedDeliveryAddress || ""}
-                          onChange={(value) => setValue("deliveryAddress", value)}
                           placeholder="Enter full delivery address including postcode"
-                          error={!!errors.deliveryAddress}
+                          className={cn("min-h-[100px] resize-none", errors.deliveryAddress && "border-destructive focus-visible:ring-destructive")}
+                          {...register("deliveryAddress")}
                         />
                         {errors.deliveryAddress && (
                           <p className="text-xs text-destructive flex items-center gap-1">
