@@ -125,7 +125,7 @@ const Quotations = () => {
                 <div className="space-y-3 pt-4 border-t border-green-200">
                   <h3 className="font-semibold text-green-800">What's Next?</h3>
                   <ul className="space-y-2 text-sm text-green-700">
-                    <li>• We'll review your booking within 2 hours</li>
+                    <li>• One of our specialists will contact you shortly to discuss the request and finalise booking</li>
                     <li>• You'll receive a detailed quote via email</li>
                     <li>• Our team will contact you to confirm collection details</li>
                     <li>• Track your delivery using the reference number above</li>
@@ -469,7 +469,7 @@ const Quotations = () => {
                   <div className="flex items-start gap-2">
                     <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                     <p className="text-sm text-muted-foreground">
-                      By submitting this form, you agree to our terms of service. We'll contact you within 2 hours with a detailed quote and booking confirmation.
+                      By submitting this form, you agree to our terms of service. One of our specialists will contact you shortly to discuss the request and finalise booking.
                     </p>
                   </div>
                 </div>
