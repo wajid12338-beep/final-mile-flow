@@ -8,7 +8,9 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-56 w-auto" />
+              <div className="bg-white p-2 rounded">
+                <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-56 w-auto" />
+              </div>
             </div>
             <p className="text-white/80 leading-relaxed">
               Professional same-day courier services across the UK. 
