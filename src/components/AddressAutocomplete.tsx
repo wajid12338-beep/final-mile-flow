@@ -44,7 +44,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
 
       setIsLoading(true);
       try {
-        const response = await fetch('/api/mapbox-geocoding', {
+        const response = await fetch('/functions/v1/mapbox-geocoding', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
