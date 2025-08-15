@@ -83,13 +83,13 @@ const Header = () => {
 
               <NavigationMenuItem>
                 <NavigationMenuLink href="/about" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-4 py-2">
-                  About
+                  About Us
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
                 <NavigationMenuLink href="#contact" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-4 py-2">
-                  Contact
+                  Contact Us
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
