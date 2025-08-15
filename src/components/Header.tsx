@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 const Header = () => {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-white/95 via-white/95 to-transparent backdrop-blur-sm border-b border-border/50">
       <div className="container mx-auto px-6">
         <div className="flex items-center h-40">
           {/* Logo */}
