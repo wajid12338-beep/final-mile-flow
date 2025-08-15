@@ -14,6 +14,11 @@ import SameDayDelivery from "./pages/services/SameDayDelivery";
 import TimedDelivery from "./pages/services/TimedDelivery";
 import HeavyHaulage from "./pages/services/HeavyHaulage";
 import Healthcare from "./pages/industries/Healthcare";
+import LegalServices from "./pages/industries/LegalServices";
+import Construction from "./pages/industries/Construction";
+import Retail from "./pages/industries/Retail";
+import Manufacturing from "./pages/industries/Manufacturing";
+import Residential from "./pages/industries/Residential";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +39,11 @@ const App = () => (
          <Route path="/services/timed-delivery" element={<TimedDelivery />} />
          <Route path="/services/heavy-haulage" element={<HeavyHaulage />} />
          <Route path="/industries/healthcare" element={<Healthcare />} />
+         <Route path="/industries/legal-services" element={<LegalServices />} />
+         <Route path="/industries/construction" element={<Construction />} />
+         <Route path="/industries/retail" element={<Retail />} />
+         <Route path="/industries/manufacturing" element={<Manufacturing />} />
+         <Route path="/industries/residential" element={<Residential />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
