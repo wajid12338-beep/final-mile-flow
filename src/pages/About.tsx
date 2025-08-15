@@ -8,23 +8,23 @@ const About = () => {
   const values = [
     {
       icon: Truck,
-      title: "Experience-Driven",
-      description: "Built on real, hands-on experience in logistics — from handling dangerous goods and customs clearance to coordinating urgent shipments with tight deadlines."
+      title: "Experience-Driven Logistics",
+      description: "Built on genuine, hands-on experience in logistics — from handling dangerous goods and customs clearance to coordinating urgent shipments with tight deadlines across the UK and Europe."
     },
     {
       icon: Users,
-      title: "Driver-Focused",
-      description: "We know what drivers go through, and we use that knowledge to make same-day courier work as efficient and stress-free as possible for everyone involved."
+      title: "Driver-Focused Operations",
+      description: "We understand what drivers face daily and use that knowledge to make same-day courier work as efficient and stress-free as possible for everyone involved — drivers and customers alike."
     },
     {
       icon: Award,
-      title: "Quality Network",
-      description: "A select group of fully vetted, highly skilled drivers — many with years of experience for companies like Amazon, DPD, and Parcelforce."
+      title: "Premium Quality Network",
+      description: "A carefully selected group of fully vetted, highly skilled drivers — many with years of experience working for leading companies like Amazon, DPD, Royal Mail, and Parcelforce."
     },
     {
       icon: Shield,
-      title: "Fair & Transparent",
-      description: "We don't believe in overcharging for speed and reliability. Our goal is simple: deliver the same (or better) service at a fair and transparent price."
+      title: "Fair & Transparent Pricing",
+      description: "We don't believe in overcharging for speed and reliability. Our goal is straightforward: deliver exceptional service at fair and transparent prices throughout the UK."
     }
   ];
 
@@ -39,8 +39,11 @@ const About = () => {
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               About Fleetory
             </h1>
-            <p className="text-xl md:text-2xl leading-relaxed opacity-90">
-              The network that moves you
+            <p className="text-xl md:text-2xl leading-relaxed opacity-90 mb-4">
+              The courier network that moves Britain forward
+            </p>
+            <p className="text-lg leading-relaxed opacity-80">
+              Professional same-day delivery services across the UK, built on experience and driven by excellence
             </p>
           </div>
         </div>
@@ -52,15 +55,15 @@ const About = () => {
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none">
               <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                Fleetory was built on real, hands-on experience in logistics — from handling dangerous goods and customs clearance to coordinating urgent shipments with tight deadlines. We understand the fast pace, the short windows, and the pressures that come with moving goods quickly and safely.
+                Fleetory was founded on genuine, hands-on experience in logistics — from handling dangerous goods and customs clearance to coordinating urgent shipments with tight deadlines. We understand the fast pace, narrow time windows, and pressures that come with moving goods quickly and safely across the UK.
               </p>
               
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                That insight comes from working on both sides of the operation: managing freight, loading for road, air, and sea transport, and working closely with drivers to ensure every job ran smoothly. We know what drivers go through, and we use that knowledge to make same-day courier work as efficient and stress-free as possible for everyone involved — especially our customers.
+                Our expertise comes from working on both sides of the operation: managing freight, loading for road, air, and sea transport, and collaborating closely with drivers to ensure every job runs smoothly. We know what drivers experience daily, and we utilise that knowledge to make same-day courier work as efficient and stress-free as possible for everyone involved — especially our valued customers.
               </p>
 
               <p className="text-lg text-muted-foreground leading-relaxed mb-12">
-                Our focus is same-day and dedicated courier services, where your shipment is the only one we handle from pickup to delivery. We've brought together a select group of fully vetted, highly skilled drivers — many with years of experience for companies like Amazon, DPD, and Parcelforce — and combined that expertise with a nationwide network of trusted couriers.
+                We specialise in same-day and dedicated courier services, where your shipment is the only priority we handle from collection to delivery. We've assembled a carefully selected group of fully vetted, highly skilled drivers — many with years of experience working for leading companies like Amazon, DPD, Royal Mail, and Parcelforce — and combined that expertise with a comprehensive nationwide network of trusted couriers.
               </p>
             </div>
 
@@ -93,10 +96,10 @@ const About = () => {
                 Our Mission
               </h2>
               <p className="text-xl text-white/90 mb-8 leading-relaxed max-w-3xl mx-auto">
-                We don't believe in overcharging for speed and reliability. Our goal is simple: deliver the same (or better) service as the big names, at a fair and transparent price, with the personal touch only a customer-focused team can offer.
+                We don't believe in overcharging for speed and reliability. Our mission is straightforward: deliver exceptional service that matches or exceeds the big names, at fair and transparent prices, with the personal touch that only a genuinely customer-focused team can provide.
               </p>
               <p className="text-2xl font-semibold text-white mb-8">
-                At Fleetory, your delivery is our priority — and we'll go the extra mile to prove it.
+                At Fleetory, your delivery is our priority — and we'll go the extra mile to prove it every single time.
               </p>
               <Button 
                 size="lg"
