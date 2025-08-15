@@ -6,17 +6,17 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <a href="/" className="flex items-center hover:opacity-80 transition-opacity duration-200">
-            <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-56 w-auto" />
+            <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-12 w-auto" />
           </a>
 
           {/* Navigation */}
-          <NavigationMenu className="hidden md:flex">
-            <NavigationMenuList className="space-x-2">
+          <NavigationMenu className="hidden lg:flex">
+            <NavigationMenuList className="space-x-1">
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium bg-transparent">
+                <NavigationMenuTrigger className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium bg-transparent px-3 py-2 text-sm">
                   Services
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -40,13 +40,13 @@ const Header = () => {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuLink href="/fleet" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-4 py-2">
+                <NavigationMenuLink href="/fleet" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-3 py-2 text-sm whitespace-nowrap">
                   Our Fleet
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium bg-transparent">
+                <NavigationMenuTrigger className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium bg-transparent px-3 py-2 text-sm">
                   Industries
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -82,13 +82,13 @@ const Header = () => {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuLink href="/about" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-4 py-2">
+                <NavigationMenuLink href="/about" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-3 py-2 text-sm whitespace-nowrap">
                   About Us
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuLink href="#contact" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-4 py-2">
+                <NavigationMenuLink href="#contact" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-3 py-2 text-sm whitespace-nowrap">
                   Contact Us
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -96,16 +96,18 @@ const Header = () => {
           </NavigationMenu>
 
           {/* CTA Buttons */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <Button 
               variant="outline" 
-              className="hidden sm:inline-flex border-logistics-blue text-logistics-blue hover:bg-logistics-blue hover:text-white transition-all duration-300"
+              size="sm"
+              className="hidden sm:inline-flex border-logistics-blue text-logistics-blue hover:bg-logistics-blue hover:text-white transition-all duration-300 text-sm whitespace-nowrap"
               onClick={() => window.location.href = '#contact'}
             >
               Request Call Back
             </Button>
             <Button 
-              className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300"
+              size="sm"
+              className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300 text-sm whitespace-nowrap"
               onClick={() => window.location.href = '/quotations'}
             >
               Get Quote
