@@ -9,7 +9,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <a href="/" className="flex items-center hover:opacity-80 transition-opacity duration-200">
-            <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-12 w-auto" />
+            <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-16 w-auto" />
           </a>
 
           {/* Navigation */}
@@ -95,24 +95,6 @@ const Header = () => {
             </NavigationMenuList>
           </NavigationMenu>
 
-          {/* CTA Buttons */}
-          <div className="flex items-center space-x-3">
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="hidden sm:inline-flex border-logistics-blue text-logistics-blue hover:bg-logistics-blue hover:text-white transition-all duration-300 text-sm whitespace-nowrap"
-              onClick={() => window.location.href = '#contact'}
-            >
-              Request Call Back
-            </Button>
-            <Button 
-              size="sm"
-              className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300 text-sm whitespace-nowrap"
-              onClick={() => window.location.href = '/quotations'}
-            >
-              Get Quote
-            </Button>
-          </div>
         </div>
       </div>
     </header>
