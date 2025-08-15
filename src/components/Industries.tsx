@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building2, Heart, Gavel, ShoppingBag, Wrench, Home } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Industries = () => {
   const industries = [
@@ -7,37 +8,43 @@ const Industries = () => {
       icon: Heart,
       title: "Healthcare & Medical",
       description: "Urgent medical supply deliveries, pharmaceutical transport, and laboratory sample collection with temperature-controlled options.",
-      services: ["Medical equipment delivery", "Pharmaceutical transport", "Laboratory samples", "Emergency medical supplies"]
+      services: ["Medical equipment delivery", "Pharmaceutical transport", "Laboratory samples", "Emergency medical supplies"],
+      link: "/industries/healthcare"
     },
     {
       icon: Gavel,
       title: "Legal Services",
       description: "Time-critical legal document delivery, court filing services, and confidential document transport with proof of delivery.",
-      services: ["Court document filing", "Contract delivery", "Evidence transport", "Confidential legal papers"]
+      services: ["Court document filing", "Contract delivery", "Evidence transport", "Confidential legal papers"],
+      link: "/industries/legal-services"
     },
     {
       icon: Building2,
       title: "Construction & Trade",
       description: "Building material deliveries, tool transport, and site-to-site logistics for construction projects across the UK.",
-      services: ["Building materials", "Tool deliveries", "Equipment transport", "Site logistics"]
+      services: ["Building materials", "Tool deliveries", "Equipment transport", "Site logistics"],
+      link: "/industries/construction"
     },
     {
       icon: ShoppingBag,
       title: "Retail & E-commerce",
       description: "Last-mile delivery solutions, inventory restocking, and urgent retail deliveries to keep your customers satisfied.",
-      services: ["Inventory restocking", "Customer deliveries", "Store transfers", "Returns collection"]
+      services: ["Inventory restocking", "Customer deliveries", "Store transfers", "Returns collection"],
+      link: "/industries/retail"
     },
     {
       icon: Wrench,
       title: "Manufacturing",
       description: "Just-in-time parts delivery, equipment transport, and supply chain support for manufacturing operations.",
-      services: ["Parts delivery", "Equipment transport", "Supply chain support", "Factory-to-factory transfer"]
+      services: ["Parts delivery", "Equipment transport", "Supply chain support", "Factory-to-factory transfer"],
+      link: "/industries/manufacturing"
     },
     {
       icon: Home,
       title: "Residential Services",
       description: "House removals, furniture delivery, and personal item transport with care and professionalism.",
-      services: ["House removals", "Furniture delivery", "Personal belongings", "Appliance transport"]
+      services: ["House removals", "Furniture delivery", "Personal belongings", "Appliance transport"],
+      link: "/industries/residential"
     }
   ];
 
@@ -58,27 +65,29 @@ const Industries = () => {
           {industries.map((industry, index) => {
             const IconComponent = industry.icon;
             return (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg">
-                <CardHeader className="text-center pb-4">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-logistics-orange to-logistics-orange-light rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <IconComponent className="h-8 w-8 text-white" />
-                  </div>
-                  <CardTitle className="text-xl text-logistics-blue">{industry.title}</CardTitle>
-                  <CardDescription className="text-gray-600">
-                    {industry.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {industry.services.map((service, serviceIndex) => (
-                      <li key={serviceIndex} className="flex items-center text-sm text-gray-600">
-                        <div className="w-2 h-2 bg-logistics-orange rounded-full mr-3 flex-shrink-0"></div>
-                        {service}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+              <Link to={industry.link} key={index}>
+                <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg cursor-pointer h-full">
+                  <CardHeader className="text-center pb-4">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-logistics-orange to-logistics-orange-light rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <IconComponent className="h-8 w-8 text-white" />
+                    </div>
+                    <CardTitle className="text-xl text-logistics-blue">{industry.title}</CardTitle>
+                    <CardDescription className="text-gray-600">
+                      {industry.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2">
+                      {industry.services.map((service, serviceIndex) => (
+                        <li key={serviceIndex} className="flex items-center text-sm text-gray-600">
+                          <div className="w-2 h-2 bg-logistics-orange rounded-full mr-3 flex-shrink-0"></div>
+                          {service}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </Link>
             );
           })}
         </div>
