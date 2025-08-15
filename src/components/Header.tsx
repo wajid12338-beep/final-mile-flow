@@ -56,7 +56,7 @@ const Header = () => {
                         <div className="font-semibold text-logistics-blue">Healthcare & Medical</div>
                         <div className="text-sm text-gray-600">Medical supplies and pharmaceutical transport</div>
                       </NavigationMenuLink>
-                      <NavigationMenuLink href="/industries/legal" className="block p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                      <NavigationMenuLink href="/industries/legal-services" className="block p-3 rounded-lg hover:bg-gray-50 transition-colors">
                         <div className="font-semibold text-logistics-blue">Legal Services</div>
                         <div className="text-sm text-gray-600">Legal document delivery and court filing</div>
                       </NavigationMenuLink>
