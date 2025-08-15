@@ -19,6 +19,7 @@ import Construction from "./pages/industries/Construction";
 import Retail from "./pages/industries/Retail";
 import Manufacturing from "./pages/industries/Manufacturing";
 import Residential from "./pages/industries/Residential";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
          <Route path="/industries/retail" element={<Retail />} />
          <Route path="/industries/manufacturing" element={<Manufacturing />} />
          <Route path="/industries/residential" element={<Residential />} />
+         <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
