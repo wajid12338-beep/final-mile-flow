@@ -6,14 +6,15 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-32">
+        <div className="flex items-center h-40">
           {/* Logo */}
-          <a href="/" className="flex items-center hover:opacity-80 transition-opacity duration-200">
-            <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-24 w-auto" />
+          <a href="/" className="flex items-center hover:opacity-80 transition-opacity duration-200 mr-8">
+            <img src="/lovable-uploads/a79e44cd-5cd8-4248-aa3a-3b2071208a15.png" alt="Fleetory Logo" className="h-32 w-auto" />
           </a>
 
-          {/* Navigation */}
-          <NavigationMenu className="hidden lg:flex">
+          {/* Navigation - Centered */}
+          <div className="flex-1 flex justify-center">
+            <NavigationMenu className="hidden lg:flex">
             <NavigationMenuList className="space-x-1">
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium bg-transparent px-3 py-2 text-sm">
@@ -94,7 +95,7 @@ const Header = () => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
-
+          </div>
         </div>
       </div>
     </header>
