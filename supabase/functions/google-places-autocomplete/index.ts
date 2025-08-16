@@ -12,7 +12,9 @@ serve(async (req) => {
   }
 
   try {
+    console.log('=== DEBUG: google-places-autocomplete called with request')
     const { query } = await req.json()
+    console.log('=== DEBUG: Query received:', query)
 
     if (!query || query.length < 3) {
       return new Response(
@@ -25,6 +27,7 @@ serve(async (req) => {
     }
 
     const apiKey = Deno.env.get('GOOGLE_MAPS_API_KEY')
+    console.log('=== DEBUG: API Key exists:', !!apiKey)
     if (!apiKey) {
       return new Response(
         JSON.stringify({ error: 'Google Maps API key not configured' }),
@@ -36,11 +39,13 @@ serve(async (req) => {
     }
 
     // Call Google Places Autocomplete API
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&components=country:gb&types=address&key=${apiKey}`
-    )
+    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&components=country:gb&types=address&key=${apiKey}`
+    console.log('=== DEBUG: Calling Google API URL:', url.replace(apiKey, 'HIDDEN_KEY'))
+    const response = await fetch(url)
 
+    console.log('=== DEBUG: Google API response status:', response.status)
     if (!response.ok) {
+      console.log('=== DEBUG: Google API response not ok')
       return new Response(
         JSON.stringify({ error: 'Failed to fetch address suggestions' }),
         { 
@@ -51,6 +56,7 @@ serve(async (req) => {
     }
 
     const data = await response.json()
+    console.log('=== DEBUG: Google API response data:', data)
 
     if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
       return new Response(

@@ -53,11 +53,14 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       setApiError(null);
       
       try {
-        console.log('Fetching Google Places suggestions for:', value);
+        console.log('=== DEBUG: Fetching Google Places suggestions for:', value);
+        console.log('=== DEBUG: About to call supabase function');
         
         const { data, error } = await supabase.functions.invoke('google-places-autocomplete', {
           body: { query: value }
         });
+        
+        console.log('=== DEBUG: Edge function response:', { data, error });
 
         if (error) {
           console.error('Edge function error:', error);
