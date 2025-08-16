@@ -80,7 +80,18 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
 
   // Calculate and display route
   useEffect(() => {
-    if (!map.current || !directionsService.current || !directionsRenderer.current || !pickup || !delivery) return;
+    if (!map.current || !directionsService.current || !directionsRenderer.current || !pickup || !delivery) {
+      console.log('=== DEBUG: Route calculation skipped - missing dependencies:', {
+        hasMap: !!map.current,
+        hasDirectionsService: !!directionsService.current,
+        hasDirectionsRenderer: !!directionsRenderer.current,
+        hasPickup: !!pickup,
+        hasDelivery: !!delivery
+      });
+      return;
+    }
+
+    console.log('=== DEBUG: Calculating route from', pickup, 'to', delivery);
 
     const request: google.maps.DirectionsRequest = {
       origin: { lat: pickup.lat, lng: pickup.lng },
@@ -89,10 +100,20 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
     };
 
     directionsService.current.route(request, (result, status) => {
+      console.log('=== DEBUG: Directions API response:', { status, result });
       if (status === 'OK' && result) {
+        console.log('=== DEBUG: Route found, displaying on map');
         directionsRenderer.current?.setDirections(result);
       } else {
-        console.error('Directions request failed due to:', status);
+        console.error('=== DEBUG: Directions request failed:', status);
+        // Show error details
+        if (status === 'REQUEST_DENIED') {
+          console.error('=== DEBUG: REQUEST_DENIED - Check if Directions API is enabled');
+        } else if (status === 'OVER_QUERY_LIMIT') {
+          console.error('=== DEBUG: OVER_QUERY_LIMIT - API quota exceeded');
+        } else if (status === 'ZERO_RESULTS') {
+          console.error('=== DEBUG: ZERO_RESULTS - No route found between points');
+        }
       }
     });
   }, [pickup, delivery, isLoaded]);
