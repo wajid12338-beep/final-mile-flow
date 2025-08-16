@@ -38,8 +38,8 @@ serve(async (req) => {
       )
     }
 
-    // Call Google Places Autocomplete API
-    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&components=country:gb&types=address&key=${apiKey}`
+    // Call Google Places Autocomplete API - removed types restriction to allow postcodes
+    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(query)}&components=country:gb&key=${apiKey}`
     console.log('=== DEBUG: Calling Google API URL:', url.replace(apiKey, 'HIDDEN_KEY'))
     const response = await fetch(url)
 
