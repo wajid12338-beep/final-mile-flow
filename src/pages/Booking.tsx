@@ -51,7 +51,7 @@ type BookingFormData = z.infer<typeof bookingSchema>;
 const Booking = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [bookingReference, setBookingReference] = useState<string | null>(null);
-  const [isCollectionContact, setIsCollectionContact] = useState(true);
+  const [isCollectionContact, setIsCollectionContact] = useState(false);
   const [collectASAP, setCollectASAP] = useState(true);
   const [pickupCoords, setPickupCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [deliveryCoords, setDeliveryCoords] = useState<{ lat: number; lng: number } | null>(null);
