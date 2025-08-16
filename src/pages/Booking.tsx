@@ -533,7 +533,24 @@ const Booking = () => {
                       <Checkbox 
                         id="isCollectionContact" 
                         checked={isCollectionContact}
-                        onCheckedChange={(checked) => setIsCollectionContact(!!checked)}
+                        onCheckedChange={(checked) => {
+                          setIsCollectionContact(!!checked);
+                          if (checked) {
+                            // Auto-copy customer details to collection contact
+                            const customerName = watch("customerName");
+                            const customerPhone = watch("customerPhone");
+                            const customerEmail = watch("customerEmail");
+                            
+                            if (customerName) setValue("collectionContact.name", customerName);
+                            if (customerPhone) setValue("collectionContact.phone", customerPhone);
+                            if (customerEmail) setValue("collectionContact.email", customerEmail);
+                          } else {
+                            // Clear collection contact fields when unchecked
+                            setValue("collectionContact.name", "");
+                            setValue("collectionContact.phone", "");
+                            setValue("collectionContact.email", "");
+                          }
+                        }}
                       />
                       <Label htmlFor="isCollectionContact" className="text-sm">
                         I am the collection contact
