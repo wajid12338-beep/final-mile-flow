@@ -65,7 +65,7 @@ const Services = () => {
                 </ul>
                 <Button 
                   className="w-full mt-6 bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold transition-all duration-300"
-                  onClick={() => window.location.href = '/quotations'}
+                  onClick={() => window.location.href = '/booking'}
                 >
                   Get a Quote
                 </Button>

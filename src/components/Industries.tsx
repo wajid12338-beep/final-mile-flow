@@ -97,7 +97,7 @@ const Industries = () => {
             Don't see your industry? We serve businesses of all types across the UK.
           </p>
           <a 
-            href="/quotations" 
+            href="/booking" 
             className="inline-flex items-center px-8 py-3 bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold rounded-lg transition-colors duration-300"
           >
             Get Your Custom Quote

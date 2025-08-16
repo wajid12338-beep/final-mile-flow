@@ -49,7 +49,7 @@ const Hero = () => {
             <Button 
               size="lg" 
               className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-              onClick={() => window.location.href = '/quotations'}
+              onClick={() => window.location.href = '/booking'}
             >
               Get a Quote
             </Button>
