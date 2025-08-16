@@ -59,10 +59,11 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
 
     map.current = new google.maps.Map(mapContainer.current, {
       center: { lat: 52.5, lng: -1.5 }, // UK center
-      zoom: 7,
+      zoom: 8, // Lower zoom level to show more area
       mapTypeControl: false,
       streetViewControl: false,
       fullscreenControl: false,
+      gestureHandling: 'greedy', // Allow all gestures
     });
 
     directionsService.current = new google.maps.DirectionsService();
@@ -73,7 +74,6 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
         strokeColor: '#ff6b35',
         strokeWeight: 4,
         strokeOpacity: 0.8,
-        geodesic: false
       },
       markerOptions: {
         draggable: false
@@ -81,7 +81,6 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
     });
     
     directionsRenderer.current.setMap(map.current);
-    console.log('=== DEBUG: DirectionsRenderer initialized and set to map');
   }, [isLoaded]);
 
   // Calculate and display route
@@ -99,10 +98,18 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
     };
 
     directionsService.current.route(request, (result, status) => {
-      console.log('=== DEBUG: Directions API response:', { status, result });
+      console.log('=== DEBUG: Directions API response:', { status });
       if (status === 'OK' && result) {
         console.log('=== DEBUG: Route found, displaying on map');
+        
+        // Clear any existing directions first
+        directionsRenderer.current?.setDirections(null);
+        
+        // Set the new directions
         directionsRenderer.current?.setDirections(result);
+        
+        // The DirectionsRenderer automatically fits the map to show the entire route
+        console.log('=== DEBUG: Route displayed successfully');
       } else {
         console.error('=== DEBUG: Directions request failed:', status);
         if (status === 'REQUEST_DENIED') {
