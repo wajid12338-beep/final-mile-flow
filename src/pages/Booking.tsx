@@ -202,8 +202,8 @@ const Booking = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-foreground mb-2">AZ Same Day</h1>
-              <p className="text-muted-foreground">Quietly Delivering a Better World</p>
+              <h1 className="text-3xl font-bold text-foreground mb-2">Fleetory</h1>
+              <p className="text-muted-foreground">The Network That Connects You</p>
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
@@ -248,7 +248,7 @@ const Booking = () => {
 
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Info className="w-4 h-4" />
-                      Need more stops? Contact us at info@azsameday.co.uk
+                      Need more stops? Contact us at fleetory@outlook.com
                     </div>
                   </div>
 
@@ -494,8 +494,8 @@ const Booking = () => {
                       <p>
                         Please note this card booking facility is for Same Day services only, if you require 
                         specialist courier services including multi-drop please call 0800 123 4567, or contact us at{" "}
-                        <a href="mailto:info@azsameday.co.uk" className="text-logistics-blue underline">
-                          info@azsameday.co.uk
+                        <a href="mailto:fleetory@outlook.com" className="text-logistics-blue underline">
+                          fleetory@outlook.com
                         </a>
                       </p>
                     </div>
