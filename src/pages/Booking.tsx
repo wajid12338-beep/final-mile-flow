@@ -124,10 +124,12 @@ const Booking = () => {
 
   // Handle address selection from autocomplete
   const handlePickupSelect = (coords: { lat: number; lng: number }) => {
+    console.log('=== DEBUG: Pickup coordinates set:', coords);
     setPickupCoords(coords);
   };
 
   const handleDeliverySelect = (coords: { lat: number; lng: number }) => {
+    console.log('=== DEBUG: Delivery coordinates set:', coords);
     setDeliveryCoords(coords);
   };
 
@@ -684,6 +686,13 @@ const Booking = () => {
                       delivery={deliveryCoords}
                       className="h-48"
                     />
+                    {/* Debug info */}
+                    {process.env.NODE_ENV === 'development' && (
+                      <div className="text-xs text-muted-foreground mt-2">
+                        <div>Pickup: {pickupCoords ? `${pickupCoords.lat}, ${pickupCoords.lng}` : 'Not set'}</div>
+                        <div>Delivery: {deliveryCoords ? `${deliveryCoords.lat}, ${deliveryCoords.lng}` : 'Not set'}</div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 

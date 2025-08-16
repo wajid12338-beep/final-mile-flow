@@ -86,6 +86,15 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
 
   // Calculate and display route
   useEffect(() => {
+    console.log('=== DEBUG: RouteMap useEffect triggered:', { 
+      hasMap: !!map.current, 
+      hasDirectionsService: !!directionsService.current, 
+      hasDirectionsRenderer: !!directionsRenderer.current, 
+      pickup, 
+      delivery,
+      isLoaded 
+    });
+    
     if (!map.current || !directionsService.current || !directionsRenderer.current || !pickup || !delivery) {
       console.log('=== DEBUG: Route calculation skipped - missing dependencies:', {
         hasMap: !!map.current,
