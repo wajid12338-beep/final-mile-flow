@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Phone, Mail, Clock, MapPin } from "lucide-react";
+import { Phone, Mail, Clock, MapPin, MessageCircle } from "lucide-react";
 
 const Contact = () => {
   return (
@@ -113,6 +113,25 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Email</h3>
                     <p className="text-muted-foreground">Fleetory@outlook.com</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 border-2 hover:border-logistics-orange/20 transition-colors duration-300">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
+                    <MessageCircle className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">WhatsApp</h3>
+                    <a 
+                      href="https://wa.me/447352288232" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-logistics-orange transition-colors duration-200"
+                    >
+                      Message us on WhatsApp
+                    </a>
                   </div>
                 </div>
               </Card>

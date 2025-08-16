@@ -60,7 +60,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="text-white/80 hover:text-logistics-orange transition-colors duration-200"
                 >
-                  WhatsApp: +44 7352288232
+                  Contact us via WhatsApp
                 </a>
               </div>
               <div className="flex items-center space-x-3">
