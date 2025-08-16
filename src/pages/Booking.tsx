@@ -146,8 +146,29 @@ const Booking = () => {
   // Auto-calculate pricing when addresses, vehicle type, service, or description change
   useEffect(() => {
     const calculateInstantPrice = async () => {
-      if (!watchedCollectFrom || !watchedDeliverTo || !watchedVehicleType || !watchedService || !watchedDescription) {
+      if (!watchedCollectFrom || !watchedDeliverTo) {
         setPricing({ collection: 0, delivery: 0, price: 0, vat: 0, total: 0 });
+        return;
+      }
+
+      // Don't require vehicle type for coordinate calculation
+      if (!watchedVehicleType || !watchedService || !watchedDescription) {
+        // Still calculate coordinates for map display, but not pricing
+        if (watchedCollectFrom && watchedDeliverTo) {
+          try {
+            const [pickupGeo, deliveryGeo] = await Promise.all([
+              geocodeAddress(watchedCollectFrom),
+              geocodeAddress(watchedDeliverTo)
+            ]);
+
+            if (pickupGeo && deliveryGeo) {
+              setPickupCoords(pickupGeo);
+              setDeliveryCoords(deliveryGeo);
+            }
+          } catch (error) {
+            console.error('Error calculating coordinates:', error);
+          }
+        }
         return;
       }
 

@@ -86,23 +86,7 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
 
   // Calculate and display route
   useEffect(() => {
-    console.log('=== DEBUG: RouteMap useEffect triggered:', { 
-      hasMap: !!map.current, 
-      hasDirectionsService: !!directionsService.current, 
-      hasDirectionsRenderer: !!directionsRenderer.current, 
-      pickup, 
-      delivery,
-      isLoaded 
-    });
-    
     if (!map.current || !directionsService.current || !directionsRenderer.current || !pickup || !delivery) {
-      console.log('=== DEBUG: Route calculation skipped - missing dependencies:', {
-        hasMap: !!map.current,
-        hasDirectionsService: !!directionsService.current,
-        hasDirectionsRenderer: !!directionsRenderer.current,
-        hasPickup: !!pickup,
-        hasDelivery: !!delivery
-      });
       return;
     }
 
@@ -118,12 +102,9 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
       console.log('=== DEBUG: Directions API response:', { status, result });
       if (status === 'OK' && result) {
         console.log('=== DEBUG: Route found, displaying on map');
-        console.log('=== DEBUG: Route details:', result.routes[0]?.overview_polyline);
         directionsRenderer.current?.setDirections(result);
-        console.log('=== DEBUG: setDirections called successfully');
       } else {
         console.error('=== DEBUG: Directions request failed:', status);
-        // Show error details
         if (status === 'REQUEST_DENIED') {
           console.error('=== DEBUG: REQUEST_DENIED - Check if Directions API is enabled');
         } else if (status === 'OVER_QUERY_LIMIT') {
