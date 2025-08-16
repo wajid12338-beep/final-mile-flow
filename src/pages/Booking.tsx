@@ -201,9 +201,34 @@ const Booking = () => {
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-foreground mb-2">Fleetory</h1>
-              <p className="text-muted-foreground">the network that moves you</p>
+            {/* Hero Section */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Get Your Quote Now</h1>
+              <p className="text-xl text-muted-foreground mb-6 max-w-3xl mx-auto">
+                With Fleetory, booking a courier is fast and simple. From urgent local deliveries to nationwide shipments, 
+                our trusted couriers ensure your items arrive safely and on time.
+              </p>
+              
+              {/* Key Features */}
+              <div className="flex flex-wrap justify-center gap-6 md:gap-8 text-muted-foreground mb-8">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-logistics-orange" />
+                  <span className="font-medium">Instant Quotes – Get a price in seconds</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-logistics-orange" />
+                  <span className="font-medium">Nationwide Coverage – Local or long-distance</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-logistics-orange" />
+                  <span className="font-medium">Trusted Couriers – Safe, reliable, professional</span>
+                </div>
+              </div>
+
+              <div className="bg-logistics-orange/10 border border-logistics-orange/20 rounded-lg p-6 max-w-2xl mx-auto">
+                <h2 className="text-2xl font-bold text-foreground mb-2">Book Today. Deliver Today.</h2>
+                <p className="text-muted-foreground">Fill in the details below and let Fleetory move it for you.</p>
+              </div>
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
