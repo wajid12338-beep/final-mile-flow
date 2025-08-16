@@ -4,11 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { MapPin, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
-interface AddressSuggestion {
-  id: string;
-  place_name: string;
-  center: [number, number];
+interface GooglePlacePrediction {
+  place_id: string;
+  description: string;
+  structured_formatting: {
+    main_text: string;
+    secondary_text: string;
+  };
 }
 
 interface AddressAutocompleteProps {
@@ -28,7 +32,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
   className,
   error
 }) => {
-  const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
+  const [suggestions, setSuggestions] = useState<GooglePlacePrediction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -49,52 +53,26 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       setApiError(null);
       
       try {
-        console.log('Attempting to fetch suggestions for:', value);
+        console.log('Fetching Google Places suggestions for:', value);
         
-        // Try the Supabase edge function first
-        const response = await fetch('/functions/v1/mapbox-geocoding', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ query: value }),
+        const { data, error } = await supabase.functions.invoke('google-places-autocomplete', {
+          body: { query: value }
         });
 
-        console.log('Response status:', response.status);
-        
-        if (!response.ok) {
-          // If edge function fails, fall back to direct Mapbox API call
-          console.log('Edge function failed, falling back to direct API call');
-          
-          const fallbackResponse = await fetch(
-            `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(value)}.json?access_token=pk.eyJ1IjoibG92YWJsZS1kZW1vIiwiYSI6ImNsMnZlemtlYzAwcXEzZG1uaWxlbXFtNnIifQ.OKzgqBRcJGR0lQ-6V7x_1A&country=GB&types=address,postcode&limit=5`
-          );
-          
-          if (!fallbackResponse.ok) {
-            throw new Error('Both edge function and direct API failed');
-          }
-          
-          const data = await fallbackResponse.json();
-          console.log('Fallback API response:', data);
-          
-          if (data.features) {
-            setSuggestions(data.features);
-            setShowSuggestions(true);
-            setSelectedIndex(-1);
-          }
-          return;
+        if (error) {
+          throw error;
         }
 
-        const data = await response.json();
-        console.log('Edge function response:', data);
+        if (data.error) {
+          setApiError(data.error);
+          console.error('Google Places API Error:', data.error);
+          return;
+        }
         
-        if (data.features) {
-          setSuggestions(data.features);
+        if (data.predictions) {
+          setSuggestions(data.predictions);
           setShowSuggestions(true);
           setSelectedIndex(-1);
-        } else if (data.error) {
-          setApiError(data.error);
-          console.error('API Error:', data.error);
         }
       } catch (error) {
         console.error('Error fetching address suggestions:', error);
@@ -114,14 +92,31 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
     setApiError(null);
   };
 
-  const handleSuggestionClick = (suggestion: AddressSuggestion) => {
-    onChange(suggestion.place_name);
+  const handleSuggestionClick = async (suggestion: GooglePlacePrediction) => {
+    onChange(suggestion.description);
     setShowSuggestions(false);
+    
     if (onSelect) {
-      onSelect({
-        lat: suggestion.center[1],
-        lng: suggestion.center[0]
-      });
+      try {
+        // Get place details including coordinates
+        const { data, error } = await supabase.functions.invoke('google-places-details', {
+          body: { placeId: suggestion.place_id }
+        });
+
+        if (error || data.error) {
+          console.error('Error fetching place details:', error || data.error);
+          return;
+        }
+
+        if (data.result?.geometry?.location) {
+          onSelect({
+            lat: data.result.geometry.location.lat,
+            lng: data.result.geometry.location.lng
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching coordinates:', error);
+      }
     }
   };
 
@@ -204,7 +199,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
           <div className="p-1">
             {suggestions.map((suggestion, index) => (
               <div
-                key={suggestion.id}
+                key={suggestion.place_id}
                 ref={el => suggestionRefs.current[index] = el}
                 className={cn(
                   "flex items-center gap-2 p-3 cursor-pointer rounded-md text-sm transition-colors",
@@ -215,7 +210,10 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
                 onClick={() => handleSuggestionClick(suggestion)}
               >
                 <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                <span className="truncate">{suggestion.place_name}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium truncate">{suggestion.structured_formatting.main_text}</div>
+                  <div className="text-xs text-muted-foreground truncate">{suggestion.structured_formatting.secondary_text}</div>
+                </div>
               </div>
             ))}
           </div>
