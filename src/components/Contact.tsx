@@ -88,21 +88,33 @@ const Contact = () => {
           {/* Contact Information */}
           <div className="space-y-8">
             {/* Contact Methods */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <Card className="text-center p-6 border-2 hover:border-logistics-orange/20 transition-colors duration-300">
-                <div className="mx-auto w-12 h-12 bg-logistics-blue rounded-full flex items-center justify-center mb-4">
-                  <Phone className="h-6 w-6 text-white" />
+            <div className="grid grid-cols-1 gap-6">
+              <Card className="p-6 border-2 hover:border-logistics-orange/20 transition-colors duration-300">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 bg-logistics-blue rounded-full flex items-center justify-center mr-4">
+                    <Phone className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">Phone & WhatsApp</h3>
+                    <div className="text-muted-foreground space-y-1">
+                      <div>+44 7539868853</div>
+                      <div>+44 7352288232</div>
+                      <div className="text-sm text-logistics-orange font-medium">Emergency: +44 7539868853</div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Phone</h3>
-                <p className="text-muted-foreground">0800 123 4567</p>
               </Card>
 
-              <Card className="text-center p-6 border-2 hover:border-logistics-orange/20 transition-colors duration-300">
-                <div className="mx-auto w-12 h-12 bg-logistics-orange rounded-full flex items-center justify-center mb-4">
-                  <Mail className="h-6 w-6 text-white" />
+              <Card className="p-6 border-2 hover:border-logistics-orange/20 transition-colors duration-300">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-logistics-orange rounded-full flex items-center justify-center mr-4">
+                    <Mail className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">Email</h3>
+                    <p className="text-muted-foreground">Fleetory@outlook.com</p>
+                  </div>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">Email</h3>
-                <p className="text-muted-foreground">info@azsameday.co.uk</p>
               </Card>
             </div>
 
@@ -124,8 +136,12 @@ const Contact = () => {
                   <span>Monday - Friday, 8:00 AM - 6:00 PM</span>
                 </div>
                 <div className="flex justify-between">
+                  <span>Weekend Hours:</span>
+                  <span>Saturday - Sunday, 9:00 AM - 5:00 PM</span>
+                </div>
+                <div className="flex justify-between">
                   <span>Emergency Support:</span>
-                  <span className="font-semibold text-logistics-orange">Always Available</span>
+                  <span className="font-semibold text-logistics-orange">+44 7539868853</span>
                 </div>
               </div>
             </Card>
