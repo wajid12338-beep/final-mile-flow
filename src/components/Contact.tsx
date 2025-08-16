@@ -171,7 +171,12 @@ const Contact = () => {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-logistics-orange rounded-full mr-3" />
-                  <span className="text-muted-foreground">Online web booking system</span>
+                  <a 
+                    href="/booking" 
+                    className="text-muted-foreground hover:text-logistics-orange transition-colors duration-200 cursor-pointer"
+                  >
+                    Online web booking system
+                  </a>
                 </div>
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-logistics-orange rounded-full mr-3" />
@@ -179,11 +184,21 @@ const Contact = () => {
                 </div>
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-logistics-orange rounded-full mr-3" />
-                  <span className="text-muted-foreground">Email booking</span>
+                  <a 
+                    href="mailto:fleetory@outlook.com" 
+                    className="text-muted-foreground hover:text-logistics-orange transition-colors duration-200 cursor-pointer"
+                  >
+                    Email booking
+                  </a>
                 </div>
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-logistics-orange rounded-full mr-3" />
-                  <span className="text-muted-foreground">Telephone support</span>
+                  <a 
+                    href="tel:+447539868853" 
+                    className="text-muted-foreground hover:text-logistics-orange transition-colors duration-200 cursor-pointer"
+                  >
+                    Telephone support
+                  </a>
                 </div>
               </div>
             </Card>
