@@ -60,19 +60,24 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
         });
 
         if (error) {
-          throw error;
+          console.error('Edge function error:', error);
+          setApiError('Unable to connect to address service. Please try again.');
+          return;
         }
 
         if (data.error) {
-          setApiError(data.error);
           console.error('Google Places API Error:', data.error);
+          setApiError(data.error);
           return;
         }
         
-        if (data.predictions) {
+        if (data.predictions && data.predictions.length > 0) {
           setSuggestions(data.predictions);
           setShowSuggestions(true);
           setSelectedIndex(-1);
+        } else {
+          setSuggestions([]);
+          setShowSuggestions(false);
         }
       } catch (error) {
         console.error('Error fetching address suggestions:', error);
