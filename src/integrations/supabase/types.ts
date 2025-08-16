@@ -14,7 +14,135 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      account_requests: {
+        Row: {
+          business_name: string
+          created_at: string
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          phone: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          business_name: string
+          created_at?: string
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          phone: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          business_name?: string
+          created_at?: string
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          phone?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      bookings: {
+        Row: {
+          booking_type: string
+          collect_from: string
+          collection_contact: Json | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          deliver_to: string
+          delivery_contact: Json | null
+          description: string
+          id: string
+          pricing: Json | null
+          reference_number: string
+          service_type: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          booking_type: string
+          collect_from: string
+          collection_contact?: Json | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          deliver_to: string
+          delivery_contact?: Json | null
+          description: string
+          id?: string
+          pricing?: Json | null
+          reference_number: string
+          service_type: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          booking_type?: string
+          collect_from?: string
+          collection_contact?: Json | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          deliver_to?: string
+          delivery_contact?: Json | null
+          description?: string
+          id?: string
+          pricing?: Json | null
+          reference_number?: string
+          service_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          business_name: string | null
+          created_at: string
+          first_name: string
+          id: string
+          last_name: string
+          phone: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          business_name?: string | null
+          created_at?: string
+          first_name: string
+          id?: string
+          last_name: string
+          phone: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          business_name?: string | null
+          created_at?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          phone?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
