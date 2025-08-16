@@ -102,13 +102,8 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
       if (status === 'OK' && result) {
         console.log('=== DEBUG: Route found, displaying on map');
         
-        // Clear any existing directions first
-        directionsRenderer.current?.setDirections(null);
-        
-        // Set the new directions
+        // Set the directions directly - no need to clear first
         directionsRenderer.current?.setDirections(result);
-        
-        // The DirectionsRenderer automatically fits the map to show the entire route
         console.log('=== DEBUG: Route displayed successfully');
       } else {
         console.error('=== DEBUG: Directions request failed:', status);
