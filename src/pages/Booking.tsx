@@ -168,6 +168,27 @@ const Booking = () => {
 
       if (error) throw error;
 
+      // Send email notifications
+      const emailError = await supabase.functions.invoke('send-booking-email', {
+        body: {
+          referenceNumber: reference,
+          customerName: data.customerName,
+          customerEmail: data.customerEmail,
+          customerPhone: data.customerPhone,
+          collectFrom: data.collectFrom,
+          deliverTo: data.deliverTo,
+          serviceType: data.serviceType,
+          description: data.description,
+          pricing: pricing,
+          bookingType: bookingMode
+        }
+      });
+
+      if (emailError.error) {
+        console.error('Email sending failed:', emailError.error);
+        // Don't fail the booking if email fails
+      }
+
       setBookingReference(reference);
       setIsSubmitted(true);
       

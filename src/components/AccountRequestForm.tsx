@@ -53,6 +53,22 @@ const AccountRequestForm = ({ onClose }: AccountRequestFormProps) => {
 
       if (error) throw error;
 
+      // Send email notifications
+      const emailError = await supabase.functions.invoke('send-account-request-email', {
+        body: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          businessName: data.businessName,
+          email: data.email,
+          phone: data.phone
+        }
+      });
+
+      if (emailError.error) {
+        console.error('Email sending failed:', emailError.error);
+        // Don't fail the request if email fails
+      }
+
       setIsSubmitted(true);
       toast.success('Account request submitted successfully!');
     } catch (error: any) {

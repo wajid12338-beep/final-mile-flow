@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -129,19 +130,61 @@ const Quotations = () => {
     try {
       setSubmitError(null);
       
-      // Simulate API call - replace with actual backend integration
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Generate booking reference
+      const reference = `QU${Date.now().toString().slice(-6)}`;
       
-      // Generate mock booking reference
-      const reference = `FL${Date.now().toString().slice(-6)}`;
+      // Save quotation request to database
+      const { error } = await supabase
+        .from('bookings')
+        .insert([{
+          reference_number: reference,
+          collect_from: data.pickupAddress,
+          deliver_to: data.deliveryAddress,
+          service_type: data.vehicleType,
+          description: `Package: ${data.packageType}, Weight: ${data.packageWeight}, Dimensions: ${data.packageDimensions}${data.specialHandling ? ', Special handling: ' + data.specialHandling : ''}${data.additionalNotes ? ', Notes: ' + data.additionalNotes : ''}`,
+          customer_name: data.contactName,
+          customer_email: data.contactEmail,
+          customer_phone: data.contactPhone,
+          booking_type: "quotation",
+          collection_contact: {
+            date: format(data.pickupDate, 'yyyy-MM-dd'),
+            time: data.pickupTime
+          },
+          delivery_contact: {
+            date: format(data.deliveryDate, 'yyyy-MM-dd'),
+            time: data.deliveryTime
+          }
+        }]);
+
+      if (error) throw error;
+
+      // Send email notifications
+      const emailError = await supabase.functions.invoke('send-booking-email', {
+        body: {
+          referenceNumber: reference,
+          customerName: data.contactName,
+          customerEmail: data.contactEmail,
+          customerPhone: data.contactPhone,
+          collectFrom: data.pickupAddress,
+          deliverTo: data.deliveryAddress,
+          serviceType: data.vehicleType,
+          description: `Quotation Request - Package: ${data.packageType}, Weight: ${data.packageWeight}, Dimensions: ${data.packageDimensions}${data.specialHandling ? ', Special handling: ' + data.specialHandling : ''}`,
+          pricing: null,
+          bookingType: "quotation"
+        }
+      });
+
+      if (emailError.error) {
+        console.error('Email sending failed:', emailError.error);
+        // Don't fail the quotation if email fails
+      }
+      
       setBookingReference(reference);
       setIsSubmitted(true);
       
-      // In real implementation, this would call your backend API
-      console.log("Booking data:", data);
-      
     } catch (error) {
-      setSubmitError("Could not save booking. Please try again.");
+      setSubmitError("Could not save quotation request. Please try again.");
+      console.error("Quotation error:", error);
     }
   };
 

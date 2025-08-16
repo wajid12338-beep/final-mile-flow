@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -5,8 +6,58 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Phone, Mail, Clock, MapPin, MessageCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    service: "",
+    message: ""
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.service) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
+      });
+
+      if (error) throw error;
+
+      toast.success("Thank you! We'll call you back within 2 hours during business hours.");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        service: "",
+        message: ""
+      });
+    } catch (error) {
+      console.error('Contact form error:', error);
+      toast.error("Sorry, there was an error submitting your request. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="py-20 bg-background" id="contact">
       <div className="container mx-auto px-6">
@@ -32,56 +83,88 @@ const Contact = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" placeholder="John" />
+              <form onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name *</Label>
+                    <Input 
+                      id="firstName" 
+                      placeholder="John" 
+                      value={formData.firstName}
+                      onChange={(e) => handleInputChange("firstName", e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name *</Label>
+                    <Input 
+                      id="lastName" 
+                      placeholder="Smith" 
+                      value={formData.lastName}
+                      onChange={(e) => handleInputChange("lastName", e.target.value)}
+                      required 
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" placeholder="Smith" />
+
+                <div className="space-y-2 mb-6">
+                  <Label htmlFor="email">Email *</Label>
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder="john@company.com" 
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    required 
+                  />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="john@company.com" />
-              </div>
+                <div className="space-y-2 mb-6">
+                  <Label htmlFor="phone">Phone Number *</Label>
+                  <Input 
+                    id="phone" 
+                    type="tel" 
+                    placeholder="+44 7123 456789" 
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    required 
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" type="tel" placeholder="+44 7123 456789" />
-              </div>
+                <div className="space-y-2 mb-6">
+                  <Label htmlFor="service">Service Required *</Label>
+                  <Select value={formData.service} onValueChange={(value) => handleInputChange("service", value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a service" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="same-day">Same-Day Courier</SelectItem>
+                      <SelectItem value="multi-drop">Multi-Drop Courier</SelectItem>
+                      <SelectItem value="van-day-rate">Van Day Rate Service</SelectItem>
+                      <SelectItem value="other">Other Requirements</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="service">Service Required</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a service" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="same-day">Same-Day Courier</SelectItem>
-                    <SelectItem value="multi-drop">Multi-Drop Courier</SelectItem>
-                    <SelectItem value="van-day-rate">Van Day Rate Service</SelectItem>
-                    <SelectItem value="other">Other Requirements</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+                <div className="space-y-2 mb-6">
+                  <Label htmlFor="message">Additional Details</Label>
+                  <Textarea 
+                    id="message" 
+                    placeholder="Please provide details about your delivery requirements..."
+                    className="min-h-[120px]"
+                    value={formData.message}
+                    onChange={(e) => handleInputChange("message", e.target.value)}
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="message">Additional Details</Label>
-                <Textarea 
-                  id="message" 
-                  placeholder="Please provide details about your delivery requirements..."
-                  className="min-h-[120px]"
-                />
-              </div>
-
-              <Button 
-                className="w-full bg-logistics-blue hover:bg-logistics-blue-light text-white font-semibold py-3 text-lg rounded-lg transition-all duration-300"
-              >
-                Request Call Back
-              </Button>
+                <Button 
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-logistics-blue hover:bg-logistics-blue-light text-white font-semibold py-3 text-lg rounded-lg transition-all duration-300 disabled:opacity-50"
+                >
+                  {loading ? "Submitting..." : "Request Call Back"}
+                </Button>
+              </form>
             </CardContent>
           </Card>
 
