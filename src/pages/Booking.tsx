@@ -25,6 +25,7 @@ import { supabase } from "@/integrations/supabase/client";
 const bookingSchema = z.object({
   collectFrom: z.string().min(10, "Please enter a complete collection address"),
   deliverTo: z.string().min(10, "Please enter a complete delivery address"),
+  vehicleType: z.string().min(1, "Please select a vehicle type"),
   serviceType: z.string().min(1, "Please select a service"),
   description: z.string().min(1, "Please describe your goods"),
   customerName: z.string().min(2, "Please enter your name"),
@@ -66,6 +67,45 @@ const Booking = () => {
     total: 0
   });
 
+  // Vehicle types from Fleet page
+  const vehicles = [
+    {
+      name: "Small Van",
+      description: "Perfect solution for urgent, light-load deliveries. Designed for agility and efficiency, ideal for navigating busy city streets.",
+      uses: ["Documents", "Large heavy boxes", "Small office items", "Furniture"],
+      maxSize: "1.4m L x 1.2m W x 1.0m H",
+      maxWeight: "400kg"
+    },
+    {
+      name: "SWB Van (Short Wheelbase)",
+      description: "Versatile workhorse offering more space while retaining excellent maneuverability. Great balance of capacity and agility.",
+      uses: ["Palletized goods", "Couple of euro pallets", "Small-scale commercial deliveries", "White goods"],
+      maxSize: "2.0m L x 1.2m W x 1.2m H",
+      maxWeight: "800kg"
+    },
+    {
+      name: "LWB Van (Long Wheelbase)",
+      description: "Built for consignments that require significant space. Capable of carrying up to three pallets and excellent for long items.",
+      uses: ["Building materials", "Medium-sized residential moves", "Office moves", "Long items"],
+      maxSize: "3.0m L x 1.2m W x 1.7m H", 
+      maxWeight: "1100kg"
+    },
+    {
+      name: "XLWB Van (Extra-Long Wheelbase)",
+      description: "Maximum capacity solution providing extensive loading area. Perfect for high-volume loads and full-pallet consignments.",
+      uses: ["Large-scale construction deliveries", "Retail deliveries", "Full-pallet consignments", "Bulk transport"],
+      maxSize: "4.0m L x 1.36m W x 1.79m H",
+      maxWeight: "1100kg"
+    },
+    {
+      name: "Luton Van",
+      description: "Specifically designed for bulkier items and removals. Box-shaped body provides maximum usable space with tail lift for easy loading.",
+      uses: ["House removals", "Office removals", "Large furniture deliveries", "Large-scale consignments"],
+      maxSize: "4.0m L x 2.0m W x 2.0m H",
+      maxWeight: "800kg"
+    }
+  ];
+
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -94,13 +134,17 @@ const Booking = () => {
 
   const watchedCollectFrom = watch("collectFrom");
   const watchedDeliverTo = watch("deliverTo");
+  const watchedVehicleType = watch("vehicleType");
   const watchedService = watch("serviceType");
   const watchedDescription = watch("description");
 
-  // Auto-calculate pricing when addresses, service, or description change
+  // Get selected vehicle details
+  const selectedVehicle = vehicles.find(v => v.name === watchedVehicleType);
+
+  // Auto-calculate pricing when addresses, vehicle type, service, or description change
   useEffect(() => {
     const calculateInstantPrice = async () => {
-      if (!watchedCollectFrom || !watchedDeliverTo || !watchedService || !watchedDescription) {
+      if (!watchedCollectFrom || !watchedDeliverTo || !watchedVehicleType || !watchedService || !watchedDescription) {
         setPricing({ collection: 0, delivery: 0, price: 0, vat: 0, total: 0 });
         return;
       }
@@ -120,7 +164,7 @@ const Booking = () => {
           
           // Calculate distance and pricing
           const distance = calculateDistance(pickupGeo, deliveryGeo);
-          const newPricing = calculatePricing(distance, watchedService, watchedDescription);
+          const newPricing = calculatePricing(distance, watchedService, watchedDescription, watchedVehicleType);
           setPricing(newPricing);
         }
       } catch (error) {
@@ -133,7 +177,7 @@ const Booking = () => {
     // Debounce the calculation
     const timeoutId = setTimeout(calculateInstantPrice, 1000);
     return () => clearTimeout(timeoutId);
-  }, [watchedCollectFrom, watchedDeliverTo, watchedService, watchedDescription]);
+  }, [watchedCollectFrom, watchedDeliverTo, watchedVehicleType, watchedService, watchedDescription]);
 
   const services = [
     "Same Day Courier",
@@ -157,6 +201,7 @@ const Booking = () => {
           collect_from: data.collectFrom,
           deliver_to: data.deliverTo,
           service_type: data.serviceType,
+          vehicle_type: data.vehicleType,
           description: data.description,
           customer_name: data.customerName,
           customer_phone: data.customerPhone,
@@ -178,6 +223,7 @@ const Booking = () => {
           collectFrom: data.collectFrom,
           deliverTo: data.deliverTo,
           serviceType: data.serviceType,
+          vehicleType: data.vehicleType,
           description: data.description,
           pricing: pricing,
           bookingType: bookingMode
@@ -416,60 +462,67 @@ const Booking = () => {
                     </div>
                   </div>
 
-                  {/* Collection Time */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-4">
-                     <div className="flex items-center space-x-2">
-                       <Checkbox 
-                         id="collectASAP" 
-                         checked={collectASAP}
-                         onCheckedChange={(checked) => setCollectASAP(!!checked)}
-                       />
-                       <Label htmlFor="collectASAP" className="text-sm font-medium">
-                         Collection as soon as possible
-                       </Label>
-                     </div>
-                     <div className="flex items-center space-x-2">
-                       <Checkbox 
-                         id="collectAfter" 
-                         checked={!collectASAP}
-                         onCheckedChange={(checked) => setCollectASAP(!checked)}
-                       />
-                       <Label htmlFor="collectAfter" className="text-sm font-medium">
-                         Collect between
-                       </Label>
-                     </div>
-                   </div>
-                   {collectASAP ? (
-                     <p className="text-sm text-muted-foreground">
-                       We aim to collect within 60 minutes of your booking being placed
-                     </p>
-                   ) : (
-                     <div className="bg-muted p-3 rounded-lg">
-                       <p className="text-sm text-muted-foreground mb-2">Select collection date and time:</p>
-                       <div className="grid grid-cols-2 gap-3">
-                         <Input type="date" className="text-sm" />
-                         <Input type="time" className="text-sm" />
-                       </div>
-                     </div>
-                   )}
+                  {/* Vehicle Type Selection */}
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium text-foreground">*Vehicle Type</Label>
+                      <Select value={watchedVehicleType || ""} onValueChange={(value) => setValue("vehicleType", value)}>
+                        <SelectTrigger className={cn("mt-1", errors.vehicleType && "border-destructive")}>
+                          <SelectValue placeholder="Select vehicle type" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border border-border shadow-lg z-50">
+                          {vehicles.map((vehicle) => (
+                            <SelectItem key={vehicle.name} value={vehicle.name}>
+                              {vehicle.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {errors.vehicleType && (
+                        <p className="text-sm text-destructive mt-1">{errors.vehicleType.message}</p>
+                      )}
+                    </div>
+
+                    {/* Vehicle Details Display */}
+                    {selectedVehicle && (
+                      <div className="mt-4 p-4 bg-muted/50 rounded-lg border">
+                        <h4 className="font-medium text-foreground mb-2">{selectedVehicle.name} Specifications</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-logistics-blue rounded-full"></div>
+                            <span className="text-sm text-muted-foreground">Max Size: {selectedVehicle.maxSize}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-logistics-orange rounded-full"></div>
+                            <span className="text-sm text-muted-foreground">Max Weight: {selectedVehicle.maxWeight}</span>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">{selectedVehicle.description}</p>
+                        <div className="text-xs">
+                          <span className="font-medium text-foreground">Common uses: </span>
+                          <span className="text-muted-foreground">{selectedVehicle.uses.join(", ")}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Service Selection */}
-                  <div className="space-y-2">
-                    <Label className="text-lg font-semibold text-foreground">Choose your Service</Label>
-                    <Select onValueChange={(value) => setValue("serviceType", value)}>
-                      <SelectTrigger className={cn(errors.serviceType && "border-destructive")}>
+                  {/* Service Type */}
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">*Service Type</Label>
+                    <Select value={watchedService || ""} onValueChange={(value) => setValue("serviceType", value)}>
+                      <SelectTrigger className={cn("mt-1", errors.serviceType && "border-destructive")}>
                         <SelectValue placeholder="Select service type" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-background border border-border shadow-lg z-50">
                         {services.map((service) => (
-                          <SelectItem key={service} value={service}>{service}</SelectItem>
+                          <SelectItem key={service} value={service}>
+                            {service}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                     {errors.serviceType && (
-                      <p className="text-sm text-destructive">{errors.serviceType.message}</p>
+                      <p className="text-sm text-destructive mt-1">{errors.serviceType.message}</p>
                     )}
                   </div>
 

@@ -36,11 +36,23 @@ export const geocodeAddress = async (address: string): Promise<{ lat: number; ln
 export const calculatePricing = (
   distance: number,
   serviceType: string,
-  description: string
+  description: string,
+  vehicleType?: string
 ): { collection: number; delivery: number; price: number; vat: number; total: number } => {
   // Base pricing structure similar to Onit Logistics
   let baseRate = 25; // Base collection fee
   let perMileRate = 1.5; // Per mile rate
+  
+  // Vehicle type multipliers
+  const vehicleMultipliers: Record<string, number> = {
+    "Small Van": 1.0,
+    "SWB Van (Short Wheelbase)": 1.2,
+    "LWB Van (Long Wheelbase)": 1.4,
+    "XLWB Van (Extra-Long Wheelbase)": 1.6,
+    "Luton Van": 1.8
+  };
+  
+  const vehicleMultiplier = vehicleType ? (vehicleMultipliers[vehicleType] || 1.0) : 1.0;
   
   // Service type multipliers
   const serviceMultipliers: { [key: string]: number } = {
@@ -63,8 +75,8 @@ export const calculatePricing = (
   
   const serviceMultiplier = serviceMultipliers[serviceType] || 1.0;
   
-  const collection = baseRate;
-  const delivery = Math.round((distance * perMileRate * serviceMultiplier * packageMultiplier) * 100) / 100;
+  const collection = baseRate * vehicleMultiplier;
+  const delivery = Math.round((distance * perMileRate * serviceMultiplier * packageMultiplier * vehicleMultiplier) * 100) / 100;
   const price = collection + delivery;
   const vat = Math.round(price * 0.2 * 100) / 100;
   const total = Math.round((price + vat) * 100) / 100;
