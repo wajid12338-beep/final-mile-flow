@@ -9,13 +9,18 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowRight, Info, CheckCircle, MapPin, Loader2 } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ArrowRight, Info, CheckCircle, MapPin, Loader2, User, UserPlus, CreditCard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { calculateDistance, geocodeAddress, calculatePricing } from "@/utils/pricingUtils";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
 import RouteMap from "@/components/RouteMap";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AccountRequestForm from "@/components/AccountRequestForm";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const bookingSchema = z.object({
   collectFrom: z.string().min(10, "Please enter a complete collection address"),
@@ -51,6 +56,8 @@ const Booking = () => {
   const [pickupCoords, setPickupCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [deliveryCoords, setDeliveryCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [isCalculatingPrice, setIsCalculatingPrice] = useState(false);
+  const [bookingMode, setBookingMode] = useState<'select' | 'guest' | 'request' | 'login'>('select');
+  const [showAccountRequest, setShowAccountRequest] = useState(false);
   const [pricing, setPricing] = useState({
     collection: 0,
     delivery: 0,
@@ -58,6 +65,9 @@ const Booking = () => {
     vat: 0,
     total: 0
   });
+
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -135,14 +145,31 @@ const Booking = () => {
 
   const onSubmit = async (data: BookingFormData) => {
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const reference = `FL${Date.now().toString().slice(-6)}`;
       
-      const reference = `AZ${Date.now().toString().slice(-6)}`;
+      // Save booking to database
+      const { error } = await supabase
+        .from('bookings')
+        .insert([{
+          reference_number: reference,
+          booking_type: user ? 'registered' : 'guest',
+          user_id: user?.id || null,
+          collect_from: data.collectFrom,
+          deliver_to: data.deliverTo,
+          service_type: data.serviceType,
+          description: data.description,
+          customer_name: data.customerName,
+          customer_phone: data.customerPhone,
+          customer_email: data.customerEmail,
+          collection_contact: data.collectionContact,
+          delivery_contact: data.deliveryContact,
+          pricing: pricing,
+        }]);
+
+      if (error) throw error;
+
       setBookingReference(reference);
       setIsSubmitted(true);
-      
-      console.log("Booking data:", data);
       
     } catch (error) {
       console.error("Booking error:", error);
@@ -195,40 +222,131 @@ const Booking = () => {
     );
   }
 
+  // Show booking mode selector if not yet selected
+  if (bookingMode === 'select') {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="pt-24 pb-16">
+          <div className="container mx-auto px-6">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Book Your Courier</h1>
+                <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+                  Choose how you'd like to book with Fleetory
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {/* Create Account */}
+                <Card className="border-2 hover:border-primary transition-colors cursor-pointer group">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                      <UserPlus className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-3">Create an Account</h3>
+                    <p className="text-muted-foreground mb-4 text-sm">
+                      Ideal for regular users and businesses - keep on top of all your bookings and jobs created
+                    </p>
+                    <Button 
+                      onClick={() => setShowAccountRequest(true)}
+                      className="w-full"
+                    >
+                      Get Started
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Already Have Account */}
+                <Card className="border-2 hover:border-primary transition-colors cursor-pointer group">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                      <User className="w-8 h-8 text-green-600" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-3">Already Have an Account?</h3>
+                    <p className="text-muted-foreground mb-4 text-sm">
+                      Sign in to access your account and manage your bookings
+                    </p>
+                    <Button 
+                      onClick={() => navigate('/auth')}
+                      className="w-full"
+                      variant="outline"
+                    >
+                      Sign In
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Book as Guest */}
+                <Card className="border-2 hover:border-primary transition-colors cursor-pointer group">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center group-hover:bg-orange-200 transition-colors">
+                      <CreditCard className="w-8 h-8 text-orange-600" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-3">Book As a Guest</h3>
+                    <p className="text-muted-foreground mb-4 text-sm">
+                      Credit/Debit card required. Quick same-day booking
+                    </p>
+                    <Button 
+                      onClick={() => setBookingMode('guest')}
+                      className="w-full bg-logistics-orange hover:bg-logistics-orange-light"
+                    >
+                      Book Now
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Account Request Dialog */}
+              <Dialog open={showAccountRequest} onOpenChange={setShowAccountRequest}>
+                <DialogContent className="max-w-md">
+                  <AccountRequestForm onClose={() => setShowAccountRequest(false)} />
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            {/* Hero Section */}
-            <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Get Your Quote Now</h1>
-              <p className="text-xl text-muted-foreground mb-6 max-w-3xl mx-auto">
-                With Fleetory, booking a courier is fast and simple. From urgent local deliveries to nationwide shipments, 
-                our trusted couriers ensure your items arrive safely and on time.
-              </p>
+            {/* Header with mode indicator */}
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setBookingMode('select')}
+                >
+                  ← Back to Options
+                </Button>
+              </div>
               
-              {/* Key Features */}
-              <div className="flex flex-wrap justify-center gap-6 md:gap-8 text-muted-foreground mb-8">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-logistics-orange" />
-                  <span className="font-medium">Instant Quotes – Get a price in seconds</span>
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+                {bookingMode === 'guest' ? 'Guest Booking' : 'Quick Quote'}
+              </h1>
+              
+              {bookingMode === 'guest' && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-3xl mx-auto mb-6">
+                  <p className="text-blue-800 text-sm">
+                    <strong>Guest Booking Notice:</strong> As a 'Guest' you can get a quote for Same-day services and make a card booking by credit or debit card. 
+                    You will need to have your package collection and delivery details ready and a valid credit or debit card number to make a Same-day booking. 
+                    Please note this card booking facility is for Same-day services only. If you require specialist courier services including multi-drop please call 
+                    <strong> +44 7539868853</strong> or contact us at <strong>fleetory@outlook.com</strong>
+                  </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-logistics-orange" />
-                  <span className="font-medium">Nationwide Coverage – Local or long-distance</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-logistics-orange" />
-                  <span className="font-medium">Trusted Couriers – Safe, reliable, professional</span>
-                </div>
-              </div>
-
-              <div className="bg-logistics-orange/10 border border-logistics-orange/20 rounded-lg p-6 max-w-2xl mx-auto">
-                <h2 className="text-2xl font-bold text-foreground mb-2">Book Today. Deliver Today.</h2>
-                <p className="text-muted-foreground">Fill in the details below and let Fleetory move it for you.</p>
-              </div>
+              )}
+              
+              <p className="text-xl text-muted-foreground mb-6 max-w-3xl mx-auto">
+                Fill in the details below and let Fleetory move it for you.
+              </p>
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
@@ -280,30 +398,40 @@ const Booking = () => {
                   {/* Collection Time */}
                   <div className="space-y-3">
                     <div className="flex items-center gap-4">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox 
-                          id="collectASAP" 
-                          checked={collectASAP}
-                          onCheckedChange={(checked) => setCollectASAP(!!checked)}
-                        />
-                        <Label htmlFor="collectASAP" className="text-sm font-medium">
-                          Collect as soon as possible
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox 
-                          id="collectAfter" 
-                          checked={!collectASAP}
-                          onCheckedChange={(checked) => setCollectASAP(!checked)}
-                        />
-                        <Label htmlFor="collectAfter" className="text-sm font-medium">
-                          Collect After
-                        </Label>
-                      </div>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      We aim to collect within 1 hour of your booking being placed
-                    </p>
+                     <div className="flex items-center space-x-2">
+                       <Checkbox 
+                         id="collectASAP" 
+                         checked={collectASAP}
+                         onCheckedChange={(checked) => setCollectASAP(!!checked)}
+                       />
+                       <Label htmlFor="collectASAP" className="text-sm font-medium">
+                         Collection as soon as possible
+                       </Label>
+                     </div>
+                     <div className="flex items-center space-x-2">
+                       <Checkbox 
+                         id="collectAfter" 
+                         checked={!collectASAP}
+                         onCheckedChange={(checked) => setCollectASAP(!checked)}
+                       />
+                       <Label htmlFor="collectAfter" className="text-sm font-medium">
+                         Collect between
+                       </Label>
+                     </div>
+                   </div>
+                   {collectASAP ? (
+                     <p className="text-sm text-muted-foreground">
+                       We aim to collect within 60 minutes of your booking being placed
+                     </p>
+                   ) : (
+                     <div className="bg-muted p-3 rounded-lg">
+                       <p className="text-sm text-muted-foreground mb-2">Select collection date and time:</p>
+                       <div className="grid grid-cols-2 gap-3">
+                         <Input type="date" className="text-sm" />
+                         <Input type="time" className="text-sm" />
+                       </div>
+                     </div>
+                   )}
                   </div>
 
                   {/* Service Selection */}
