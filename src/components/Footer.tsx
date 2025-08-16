@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -45,12 +45,23 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold">Contact Us</h4>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 mb-3">
                 <Phone className="h-5 w-5 text-logistics-orange flex-shrink-0" />
                 <div className="text-white/80">
                   <div>+44 7539868853</div>
                   <div>+44 7352288232</div>
                 </div>
+              </div>
+              <div className="flex items-center space-x-3 mb-3">
+                <MessageCircle className="h-5 w-5 text-logistics-orange flex-shrink-0" />
+                <a 
+                  href="https://wa.me/447352288232" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-white/80 hover:text-logistics-orange transition-colors duration-200"
+                >
+                  WhatsApp: +44 7352288232
+                </a>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-logistics-orange flex-shrink-0" />

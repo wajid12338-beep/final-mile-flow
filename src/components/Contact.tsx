@@ -140,7 +140,7 @@ const Contact = () => {
                   <span>Saturday - Sunday, 9:00 AM - 5:00 PM</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Emergency Support:</span>
+                  <span>Out Of Hours:</span>
                   <span className="font-semibold text-logistics-orange">+44 7539868853</span>
                 </div>
               </div>
