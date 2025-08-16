@@ -39,7 +39,7 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
 
         // Load Google Maps script
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places,geometry`;
         script.async = true;
         script.defer = true;
         script.onload = () => setIsLoaded(true);
@@ -68,14 +68,20 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
     directionsService.current = new google.maps.DirectionsService();
     directionsRenderer.current = new google.maps.DirectionsRenderer({
       suppressMarkers: false,
+      draggable: false,
       polylineOptions: {
         strokeColor: '#ff6b35',
         strokeWeight: 4,
         strokeOpacity: 0.8,
+        geodesic: false
       },
+      markerOptions: {
+        draggable: false
+      }
     });
     
     directionsRenderer.current.setMap(map.current);
+    console.log('=== DEBUG: DirectionsRenderer initialized and set to map');
   }, [isLoaded]);
 
   // Calculate and display route
@@ -103,7 +109,9 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
       console.log('=== DEBUG: Directions API response:', { status, result });
       if (status === 'OK' && result) {
         console.log('=== DEBUG: Route found, displaying on map');
+        console.log('=== DEBUG: Route details:', result.routes[0]?.overview_polyline);
         directionsRenderer.current?.setDirections(result);
+        console.log('=== DEBUG: setDirections called successfully');
       } else {
         console.error('=== DEBUG: Directions request failed:', status);
         // Show error details
