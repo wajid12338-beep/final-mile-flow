@@ -187,7 +187,10 @@ const Booking = () => {
           
           // Calculate distance and pricing
           const distance = calculateDistance(pickupGeo, deliveryGeo);
+          console.log('=== DEBUG: Distance calculated:', distance, 'miles');
+          console.log('=== DEBUG: Pricing inputs:', { distance, service: watchedService, description: watchedDescription, vehicleType: watchedVehicleType });
           const newPricing = calculatePricing(distance, watchedService, watchedDescription, watchedVehicleType);
+          console.log('=== DEBUG: Calculated pricing:', newPricing);
           setPricing(newPricing);
         }
       } catch (error) {
@@ -205,9 +208,7 @@ const Booking = () => {
   const services = [
     "Same Day Courier",
     "Next Day Courier", 
-    "Multi-Drop Courier",
-    "Van Day Rate Service",
-    "Overnight Service"
+    "Overnight Courier"
   ];
 
   const onSubmit = async (data: BookingFormData) => {

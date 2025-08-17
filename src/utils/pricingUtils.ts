@@ -39,7 +39,10 @@ export const calculatePricing = (
   description: string,
   vehicleType?: string
 ): { collection: number; delivery: number; price: number; vat: number; total: number } => {
+  console.log('=== PRICING FUNCTION: Called with:', { distance, serviceType, description, vehicleType });
+  
   if (!vehicleType) {
+    console.log('=== PRICING FUNCTION: No vehicle type provided');
     return { collection: 0, delivery: 0, price: 0, vat: 0, total: 0 };
   }
 
