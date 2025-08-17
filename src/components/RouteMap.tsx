@@ -85,6 +85,19 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
   // Calculate and display route
   useEffect(() => {
     if (!map.current || !directionsService.current || !directionsRenderer.current || !pickup || !delivery) {
+      console.log('=== DEBUG: Missing requirements:', {
+        map: !!map.current,
+        directionsService: !!directionsService.current,
+        directionsRenderer: !!directionsRenderer.current,
+        pickup: !!pickup,
+        delivery: !!delivery
+      });
+      return;
+    }
+
+    // Validate that map.current is actually a Google Maps instance
+    if (!map.current.getCenter) {
+      console.error('=== DEBUG: map.current is not a valid Google Maps instance');
       return;
     }
 
@@ -101,71 +114,98 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
       if (status === 'OK' && result) {
         console.log('=== DEBUG: Route found, displaying on map');
         
+        // Double-check map is still valid before proceeding
+        if (!map.current || !map.current.getCenter) {
+          console.error('=== DEBUG: Map became invalid during directions callback');
+          return;
+        }
+
         // Clear existing markers first
         if (pickupMarker.current) {
           console.log('=== DEBUG: Clearing existing pickup marker');
-          pickupMarker.current.setMap(null);
+          try {
+            pickupMarker.current.setMap(null);
+          } catch (e) {
+            console.error('=== DEBUG: Error clearing pickup marker:', e);
+          }
           pickupMarker.current = null;
         }
         if (deliveryMarker.current) {
           console.log('=== DEBUG: Clearing existing delivery marker');
-          deliveryMarker.current.setMap(null);
+          try {
+            deliveryMarker.current.setMap(null);
+          } catch (e) {
+            console.error('=== DEBUG: Error clearing delivery marker:', e);
+          }
           deliveryMarker.current = null;
         }
 
         // Set the directions (this will draw the route line)
-        directionsRenderer.current?.setDirections(result);
-        console.log('=== DEBUG: Route line displayed');
+        try {
+          directionsRenderer.current?.setDirections(result);
+          console.log('=== DEBUG: Route line displayed');
+        } catch (e) {
+          console.error('=== DEBUG: Error setting directions:', e);
+          return;
+        }
 
-        // Create pickup marker (green with "A")
+        // Create pickup marker (green with "A") - with error handling
         console.log('=== DEBUG: Creating pickup marker at:', pickup);
-        pickupMarker.current = new google.maps.Marker({
-          position: { lat: pickup.lat, lng: pickup.lng },
-          map: map.current,
-          title: 'Pickup Location - A',
-          label: {
-            text: 'A',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: '16px'
-          },
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: '#22c55e', // Green
-            fillOpacity: 1,
-            strokeColor: '#ffffff',
-            strokeWeight: 3,
-            scale: 15
-          },
-          zIndex: 1000 // Ensure it's on top
-        });
+        try {
+          pickupMarker.current = new google.maps.Marker({
+            position: { lat: pickup.lat, lng: pickup.lng },
+            map: map.current,
+            title: 'Pickup Location - A',
+            label: {
+              text: 'A',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '16px'
+            },
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              fillColor: '#22c55e', // Green
+              fillOpacity: 1,
+              strokeColor: '#ffffff',
+              strokeWeight: 3,
+              scale: 15
+            },
+            zIndex: 1000 // Ensure it's on top
+          });
+          console.log('=== DEBUG: Pickup marker created successfully');
+        } catch (e) {
+          console.error('=== DEBUG: Error creating pickup marker:', e);
+        }
 
-        // Create delivery marker (red with "B")
+        // Create delivery marker (red with "B") - with error handling
         console.log('=== DEBUG: Creating delivery marker at:', delivery);
-        deliveryMarker.current = new google.maps.Marker({
-          position: { lat: delivery.lat, lng: delivery.lng },
-          map: map.current,
-          title: 'Delivery Location - B',
-          label: {
-            text: 'B',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: '16px'
-          },
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: '#ef4444', // Red
-            fillOpacity: 1,
-            strokeColor: '#ffffff',
-            strokeWeight: 3,
-            scale: 15
-          },
-          zIndex: 1000 // Ensure it's on top
-        });
+        try {
+          deliveryMarker.current = new google.maps.Marker({
+            position: { lat: delivery.lat, lng: delivery.lng },
+            map: map.current,
+            title: 'Delivery Location - B',
+            label: {
+              text: 'B',
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: '16px'
+            },
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              fillColor: '#ef4444', // Red
+              fillOpacity: 1,
+              strokeColor: '#ffffff',
+              strokeWeight: 3,
+              scale: 15
+            },
+            zIndex: 1000 // Ensure it's on top
+          });
+          console.log('=== DEBUG: Delivery marker created successfully');
+        } catch (e) {
+          console.error('=== DEBUG: Error creating delivery marker:', e);
+        }
         
-        console.log('=== DEBUG: Both markers created successfully');
-        console.log('=== DEBUG: Pickup marker visible:', pickupMarker.current.getVisible());
-        console.log('=== DEBUG: Delivery marker visible:', deliveryMarker.current.getVisible());
+        console.log('=== DEBUG: Route and markers setup complete');
         
       } else {
         console.error('=== DEBUG: Directions request failed:', status);
