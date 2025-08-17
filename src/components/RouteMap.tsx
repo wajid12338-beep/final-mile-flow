@@ -121,11 +121,15 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
             text: 'A',
             color: 'white',
             fontWeight: 'bold',
-            fontSize: '14px'
+            fontSize: '16px'
           },
           icon: {
-            url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
-            scaledSize: new google.maps.Size(40, 40)
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: '#22c55e',
+            fillOpacity: 1,
+            strokeColor: '#ffffff',
+            strokeWeight: 2,
+            scale: 12
           }
         });
 
@@ -138,15 +142,19 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
             text: 'B',
             color: 'white',
             fontWeight: 'bold',
-            fontSize: '14px'
+            fontSize: '16px'
           },
           icon: {
-            url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-            scaledSize: new google.maps.Size(40, 40)
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: '#ef4444',
+            fillOpacity: 1,
+            strokeColor: '#ffffff',
+            strokeWeight: 2,
+            scale: 12
           }
         });
         
-        console.log('=== DEBUG: Route and markers displayed successfully');
+        console.log('=== DEBUG: Route and custom markers displayed successfully');
       } else {
         console.error('=== DEBUG: Directions request failed:', status);
         if (status === 'REQUEST_DENIED') {
