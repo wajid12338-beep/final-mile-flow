@@ -39,51 +39,57 @@ export const calculatePricing = (
   description: string,
   vehicleType?: string
 ): { collection: number; delivery: number; price: number; vat: number; total: number } => {
-  // Base pricing structure similar to Onit Logistics
-  let baseRate = 25; // Base collection fee
-  let perMileRate = 1.5; // Per mile rate
-  
-  // Vehicle type multipliers
-  const vehicleMultipliers: Record<string, number> = {
-    "Small Van": 1.0,
-    "SWB Van (Short Wheelbase)": 1.2,
-    "LWB Van (Long Wheelbase)": 1.4,
-    "XLWB Van (Extra-Long Wheelbase)": 1.6,
-    "Luton Van": 1.8
-  };
-  
-  const vehicleMultiplier = vehicleType ? (vehicleMultipliers[vehicleType] || 1.0) : 1.0;
-  
-  // Service type multipliers
-  const serviceMultipliers: { [key: string]: number } = {
-    "Same Day Courier": 1.0,
-    "Next Day Courier": 0.8,
-    "Multi-Drop Courier": 1.3,
-    "Van Day Rate Service": 2.0,
-    "Overnight Service": 1.2
-  };
-  
-  // Package size multipliers based on description
-  let packageMultiplier = 1.0;
-  const desc = description.toLowerCase();
-  if (desc.includes('large') || desc.includes('van') || desc.includes('boxes')) {
-    packageMultiplier = 1.2;
+  if (!vehicleType) {
+    return { collection: 0, delivery: 0, price: 0, vat: 0, total: 0 };
   }
-  if (desc.includes('small') || desc.includes('document') || desc.includes('envelope')) {
-    packageMultiplier = 0.8;
+
+  // Pricing structure based on your pricing sheet
+  const vehiclePricing: Record<string, { baseRate: number; perMileRate: number; baseDistance: number }> = {
+    "Small Van": { baseRate: 45, perMileRate: 1.15, baseDistance: 20 },
+    "SWB Van (Short Wheelbase)": { baseRate: 50, perMileRate: 1.25, baseDistance: 20 },
+    "LWB Van (Long Wheelbase)": { baseRate: 60, perMileRate: 1.30, baseDistance: 20 },
+    "XLWB Van (Extra-Long Wheelbase)": { baseRate: 70, perMileRate: 1.70, baseDistance: 20 },
+    "Luton Van": { baseRate: 0, perMileRate: 0, baseDistance: 0 } // TBC - requires specialist consultation
+  };
+
+  const pricing = vehiclePricing[vehicleType];
+  
+  if (!pricing) {
+    return { collection: 0, delivery: 0, price: 0, vat: 0, total: 0 };
   }
+
+  // Special handling for Luton Van
+  if (vehicleType === "Luton Van") {
+    return { 
+      collection: 0, 
+      delivery: 0, 
+      price: 0, 
+      vat: 0, 
+      total: 0 
+    };
+  }
+
+  let price = 0;
   
-  const serviceMultiplier = serviceMultipliers[serviceType] || 1.0;
+  if (distance <= pricing.baseDistance) {
+    // Within base distance - fixed call out charge
+    price = pricing.baseRate;
+  } else {
+    // Over base distance - base rate + per mile charge for extra miles
+    const extraMiles = distance - pricing.baseDistance;
+    price = pricing.baseRate + (extraMiles * pricing.perMileRate);
+  }
+
+  // Round to 2 decimal places
+  price = Math.round(price * 100) / 100;
   
-  const collection = baseRate * vehicleMultiplier;
-  const delivery = Math.round((distance * perMileRate * serviceMultiplier * packageMultiplier * vehicleMultiplier) * 100) / 100;
-  const price = collection + delivery;
+  // Calculate VAT at 20%
   const vat = Math.round(price * 0.2 * 100) / 100;
   const total = Math.round((price + vat) * 100) / 100;
-  
+
   return {
-    collection,
-    delivery,
+    collection: 0, // Not separately itemized in new pricing structure
+    delivery: price,
     price,
     vat,
     total
