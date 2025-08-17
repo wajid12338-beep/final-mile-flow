@@ -143,32 +143,11 @@ const Booking = () => {
   // Get selected vehicle details
   const selectedVehicle = vehicles.find(v => v.name === watchedVehicleType);
 
-  // Auto-calculate pricing when addresses, vehicle type, service, or description change
+  // Auto-calculate pricing when addresses and vehicle type change
   useEffect(() => {
     const calculateInstantPrice = async () => {
-      if (!watchedCollectFrom || !watchedDeliverTo) {
+      if (!watchedCollectFrom || !watchedDeliverTo || !watchedVehicleType) {
         setPricing({ collection: 0, delivery: 0, price: 0, vat: 0, total: 0 });
-        return;
-      }
-
-      // Don't require vehicle type for coordinate calculation
-      if (!watchedVehicleType || !watchedService || !watchedDescription) {
-        // Still calculate coordinates for map display, but not pricing
-        if (watchedCollectFrom && watchedDeliverTo) {
-          try {
-            const [pickupGeo, deliveryGeo] = await Promise.all([
-              geocodeAddress(watchedCollectFrom),
-              geocodeAddress(watchedDeliverTo)
-            ]);
-
-            if (pickupGeo && deliveryGeo) {
-              setPickupCoords(pickupGeo);
-              setDeliveryCoords(deliveryGeo);
-            }
-          } catch (error) {
-            console.error('Error calculating coordinates:', error);
-          }
-        }
         return;
       }
 
@@ -188,8 +167,8 @@ const Booking = () => {
           // Calculate distance and pricing
           const distance = calculateDistance(pickupGeo, deliveryGeo);
           console.log('=== DEBUG: Distance calculated:', distance, 'miles');
-          console.log('=== DEBUG: Pricing inputs:', { distance, service: watchedService, description: watchedDescription, vehicleType: watchedVehicleType });
-          const newPricing = calculatePricing(distance, watchedService, watchedDescription, watchedVehicleType);
+          console.log('=== DEBUG: Pricing inputs:', { distance, service: watchedService || 'Same Day Courier', description: watchedDescription || 'Standard delivery', vehicleType: watchedVehicleType });
+          const newPricing = calculatePricing(distance, watchedService || 'Same Day Courier', watchedDescription || 'Standard delivery', watchedVehicleType);
           console.log('=== DEBUG: Calculated pricing:', newPricing);
           setPricing(newPricing);
         }
@@ -203,7 +182,7 @@ const Booking = () => {
     // Debounce the calculation
     const timeoutId = setTimeout(calculateInstantPrice, 1000);
     return () => clearTimeout(timeoutId);
-  }, [watchedCollectFrom, watchedDeliverTo, watchedVehicleType, watchedService, watchedDescription]);
+  }, [watchedCollectFrom, watchedDeliverTo, watchedVehicleType]);
 
   const services = [
     "Same Day Courier",
