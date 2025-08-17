@@ -11,20 +11,32 @@ export const calculateDistance = (
     Math.cos(pickup.lat * Math.PI / 180) * Math.cos(delivery.lat * Math.PI / 180) * 
     Math.sin(dLng/2) * Math.sin(dLng/2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
+  const distanceKm = R * c;
+  // Convert to miles (1 km = 0.621371 miles)
+  return distanceKm * 0.621371;
 };
 
 export const geocodeAddress = async (address: string): Promise<{ lat: number; lng: number } | null> => {
   try {
-    // Using a mock geocoding for demo - in production you'd use Google Maps or Mapbox geocoding
-    const response = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=pk.eyJ1IjoibG92YWJsZS1kZW1vIiwiYSI6ImNsMnZlemtlYzAwcXEzZG1uaWxlbXFtNnIifQ.OKzgqBRcJGR0lQ-6V7x_1A&country=GB&limit=1`
-    );
+    // Use Supabase edge function for Google Places geocoding
+    const response = await fetch('https://qvrrwebgpevogwougsww.supabase.co/functions/v1/google-places-geocoding', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2cnJ3ZWJncGV2b2d3b3Vnc3d3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzNDA1MTEsImV4cCI6MjA3MDkxNjUxMX0.cQPR6DLxBA9Tktvekpy71J4WE-BGQziDCXyneTnPNg8`
+      },
+      body: JSON.stringify({ address })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Geocoding API error: ${response.status}`);
+    }
+    
     const data = await response.json();
     
-    if (data.features && data.features.length > 0) {
-      const [lng, lat] = data.features[0].center;
-      return { lat, lng };
+    if (data.results && data.results.length > 0) {
+      const location = data.results[0].geometry.location;
+      return { lat: location.lat, lng: location.lng };
     }
     return null;
   } catch (error) {
@@ -58,11 +70,13 @@ export const calculatePricing = (
   const pricing = vehiclePricing[vehicleType];
   
   if (!pricing) {
+    console.log('=== PRICING FUNCTION: No pricing found for vehicle type:', vehicleType);
     return { collection: 0, delivery: 0, price: 0, vat: 0, total: 0 };
   }
 
   // Special handling for Luton Van
   if (vehicleType === "Luton Van") {
+    console.log('=== PRICING FUNCTION: Luton Van requires consultation');
     return { 
       collection: 0, 
       delivery: 0, 
@@ -89,6 +103,8 @@ export const calculatePricing = (
   // Calculate VAT at 20%
   const vat = Math.round(price * 0.2 * 100) / 100;
   const total = Math.round((price + vat) * 100) / 100;
+
+  console.log('=== PRICING FUNCTION: Final result:', { price, vat, total });
 
   return {
     collection: 0, // Not separately itemized in new pricing structure

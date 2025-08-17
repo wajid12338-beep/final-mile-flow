@@ -706,28 +706,26 @@ const Booking = () => {
                         <span className="text-sm">Calculating price...</span>
                       </div>
                     )}
-                    <div className="flex justify-between">
-                      <span>Collection:</span>
-                      <span>{pricing.collection > 0 ? `£${pricing.collection.toFixed(2)}` : '-'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Delivery:</span>
-                      <span>{pricing.delivery > 0 ? `£${pricing.delivery.toFixed(2)}` : '-'}</span>
-                    </div>
-                    <div className="flex justify-between font-semibold">
-                      <span>Price:</span>
+                    <div className="flex justify-between font-semibold text-lg">
+                      <span>Price (excl. VAT):</span>
                       <span>{pricing.price > 0 ? `£${pricing.price.toFixed(2)}` : '-'}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span>VAT:</span>
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span>VAT (20%):</span>
                       <span>{pricing.vat > 0 ? `£${pricing.vat.toFixed(2)}` : '-'}</span>
                     </div>
                     <div className="border-t pt-3">
-                      <div className="flex justify-between font-bold text-lg">
-                        <span>Total:</span>
+                      <div className="flex justify-between font-bold text-xl text-logistics-orange">
+                        <span>Total (incl. VAT):</span>
                         <span>{pricing.total > 0 ? `£${pricing.total.toFixed(2)}` : '-'}</span>
                       </div>
                     </div>
+                    {pricing.total > 0 && (
+                      <div className="text-xs text-muted-foreground mt-2">
+                        Distance: {pickupCoords && deliveryCoords ? 
+                          `${calculateDistance(pickupCoords, deliveryCoords).toFixed(1)} miles` : '-'}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
