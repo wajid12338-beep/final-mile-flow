@@ -59,6 +59,7 @@ const Booking = () => {
   const [isCalculatingPrice, setIsCalculatingPrice] = useState(false);
   const [bookingMode, setBookingMode] = useState<'select' | 'guest' | 'request' | 'login'>('select');
   const [showAccountRequest, setShowAccountRequest] = useState(false);
+  const [drivingDistance, setDrivingDistance] = useState<number | null>(null);
   const [pricing, setPricing] = useState({
     collection: 0,
     delivery: 0,
@@ -167,6 +168,7 @@ const Booking = () => {
           // Calculate driving distance and pricing
           const distance = await calculateDrivingDistance(pickupGeo, deliveryGeo);
           console.log('=== DEBUG: Driving distance calculated:', distance, 'miles');
+          setDrivingDistance(distance);
           console.log('=== DEBUG: Pricing inputs:', { distance, service: watchedService || 'Same Day Courier', description: watchedDescription || 'Standard delivery', vehicleType: watchedVehicleType });
           const newPricing = calculatePricing(distance, watchedService || 'Same Day Courier', watchedDescription || 'Standard delivery', watchedVehicleType);
           console.log('=== DEBUG: Calculated pricing:', newPricing);
@@ -715,9 +717,9 @@ const Booking = () => {
                     )}
 
                     {/* Distance */}
-                    {pickupCoords && deliveryCoords && pricing.total > 0 && (
+                    {drivingDistance && pricing.total > 0 && (
                       <div className="text-xs text-muted-foreground">
-                        Distance: Calculated from Google Maps
+                        Distance: {drivingDistance.toFixed(1)} miles (driving distance)
                       </div>
                     )}
 
