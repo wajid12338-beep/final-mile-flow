@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ArrowRight, Info, CheckCircle, MapPin, Loader2, User, UserPlus, CreditCard } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { calculateDistance, geocodeAddress, calculatePricing } from "@/utils/pricingUtils";
+import { calculateDistance, calculateDrivingDistance, geocodeAddress, calculatePricing } from "@/utils/pricingUtils";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
 import RouteMap from "@/components/RouteMap";
 import Header from "@/components/Header";
@@ -164,9 +164,9 @@ const Booking = () => {
           setPickupCoords(pickupGeo);
           setDeliveryCoords(deliveryGeo);
           
-          // Calculate distance and pricing
-          const distance = calculateDistance(pickupGeo, deliveryGeo);
-          console.log('=== DEBUG: Distance calculated:', distance, 'miles');
+          // Calculate driving distance and pricing
+          const distance = await calculateDrivingDistance(pickupGeo, deliveryGeo);
+          console.log('=== DEBUG: Driving distance calculated:', distance, 'miles');
           console.log('=== DEBUG: Pricing inputs:', { distance, service: watchedService || 'Same Day Courier', description: watchedDescription || 'Standard delivery', vehicleType: watchedVehicleType });
           const newPricing = calculatePricing(distance, watchedService || 'Same Day Courier', watchedDescription || 'Standard delivery', watchedVehicleType);
           console.log('=== DEBUG: Calculated pricing:', newPricing);
@@ -715,9 +715,9 @@ const Booking = () => {
                     )}
 
                     {/* Distance */}
-                    {pickupCoords && deliveryCoords && (
+                    {pickupCoords && deliveryCoords && pricing.total > 0 && (
                       <div className="text-xs text-muted-foreground">
-                        Distance: {calculateDistance(pickupCoords, deliveryCoords).toFixed(1)} miles
+                        Distance: Calculated from Google Maps
                       </div>
                     )}
 

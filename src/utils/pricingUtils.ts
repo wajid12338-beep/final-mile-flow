@@ -1,5 +1,46 @@
 // Utility functions for distance calculation and pricing
-export const calculateDistance = (
+// Calculate driving distance using Google Maps Directions API
+export const calculateDrivingDistance = async (
+  pickup: { lat: number; lng: number },
+  delivery: { lat: number; lng: number }
+): Promise<number> => {
+  return new Promise((resolve, reject) => {
+    if (!window.google || !window.google.maps) {
+      // Fallback to straight-line distance if Google Maps not loaded
+      resolve(calculateStraightLineDistance(pickup, delivery));
+      return;
+    }
+
+    const directionsService = new google.maps.DirectionsService();
+    
+    directionsService.route({
+      origin: { lat: pickup.lat, lng: pickup.lng },
+      destination: { lat: delivery.lat, lng: delivery.lng },
+      travelMode: google.maps.TravelMode.DRIVING,
+    }, (result, status) => {
+      if (status === 'OK' && result) {
+        const route = result.routes[0];
+        if (route && route.legs && route.legs.length > 0) {
+          const distance = route.legs[0].distance;
+          if (distance) {
+            // Google returns distance in meters, convert to miles
+            const miles = distance.value * 0.000621371;
+            console.log('=== DEBUG: Google Directions distance:', distance.text, '=', miles.toFixed(2), 'miles');
+            resolve(miles);
+            return;
+          }
+        }
+      }
+      
+      console.warn('=== DEBUG: Directions API failed, falling back to straight-line distance');
+      // Fallback to straight-line distance
+      resolve(calculateStraightLineDistance(pickup, delivery));
+    });
+  });
+};
+
+// Fallback straight-line distance calculation
+export const calculateStraightLineDistance = (
   pickup: { lat: number; lng: number },
   delivery: { lat: number; lng: number }
 ): number => {
@@ -15,6 +56,9 @@ export const calculateDistance = (
   // Convert to miles (1 km = 0.621371 miles)
   return distanceKm * 0.621371;
 };
+
+// Legacy function name for backward compatibility
+export const calculateDistance = calculateStraightLineDistance;
 
 export const geocodeAddress = async (address: string): Promise<{ lat: number; lng: number } | null> => {
   try {
