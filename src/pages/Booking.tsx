@@ -688,6 +688,7 @@ const Booking = () => {
                       pickup={pickupCoords} 
                       delivery={deliveryCoords}
                       className="h-48"
+                      key={`${pickupCoords?.lat}-${pickupCoords?.lng}-${deliveryCoords?.lat}-${deliveryCoords?.lng}`}
                     />
                     {/* Debug info */}
                     {process.env.NODE_ENV === 'development' && (
