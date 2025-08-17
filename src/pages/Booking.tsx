@@ -699,6 +699,18 @@ const Booking = () => {
                   </CardContent>
                 </Card>
 
+                {/* Driving Distance - Below the map */}
+                {drivingDistance && pricing.total > 0 && (
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="text-center">
+                        <Label className="text-sm font-medium text-muted-foreground">Actual Driving Distance</Label>
+                        <p className="text-lg font-semibold text-primary">{drivingDistance.toFixed(1)} miles</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
                 {/* Pricing Summary */}
                 <Card>
                   <CardContent className="p-6 space-y-4">
@@ -718,13 +730,6 @@ const Booking = () => {
                       </div>
                     )}
 
-                    {/* Actual Driving Distance */}
-                    {drivingDistance && pricing.total > 0 && (
-                      <div>
-                        <Label className="text-sm font-medium text-muted-foreground">Actual Driving Distance (in miles)</Label>
-                        <p className="text-sm font-medium">{drivingDistance.toFixed(1)} miles</p>
-                      </div>
-                    )}
 
                     {/* Pricing calculation indicator */}
                     {isCalculatingPrice && (
