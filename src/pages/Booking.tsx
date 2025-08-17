@@ -702,28 +702,31 @@ const Booking = () => {
                 {/* Pricing Summary */}
                 <Card>
                   <CardContent className="p-6 space-y-4">
-                    {/* Address Summary */}
+                    {/* Collect from address */}
                     {watchedCollectFrom && (
                       <div>
-                        <Label className="text-sm font-medium text-muted-foreground">Collection:</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">Collect from address</Label>
                         <p className="text-sm font-medium">{watchedCollectFrom}</p>
                       </div>
                     )}
+                    
+                    {/* Deliver to address */}
                     {watchedDeliverTo && (
                       <div>
-                        <Label className="text-sm font-medium text-muted-foreground">Delivery:</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">Deliver to address</Label>
                         <p className="text-sm font-medium">{watchedDeliverTo}</p>
                       </div>
                     )}
 
-                    {/* Distance */}
+                    {/* Actual Driving Distance */}
                     {drivingDistance && pricing.total > 0 && (
-                      <div className="text-xs text-muted-foreground">
-                        Distance: {drivingDistance.toFixed(1)} miles (driving distance)
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Actual Driving Distance (in miles)</Label>
+                        <p className="text-sm font-medium">{drivingDistance.toFixed(1)} miles</p>
                       </div>
                     )}
 
-                    {/* Pricing */}
+                    {/* Pricing calculation indicator */}
                     {isCalculatingPrice && (
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -731,18 +734,19 @@ const Booking = () => {
                       </div>
                     )}
                     
-                    <div className="space-y-2 border-t pt-4">
-                      <div className="flex justify-between text-lg font-semibold">
-                        <span>Price</span>
-                        <span>{pricing.price > 0 ? `£${pricing.price.toFixed(2)}` : '£0.00'}</span>
+                    {/* Price breakdown */}
+                    <div className="space-y-3 border-t pt-4">
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium">Price (exc. VAT)</span>
+                        <span className="text-sm font-medium">{pricing.price > 0 ? `£${pricing.price.toFixed(2)}` : '£0.00'}</span>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span>VAT</span>
-                        <span>{pricing.vat > 0 ? `£${pricing.vat.toFixed(2)}` : '£0.00'}</span>
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium">VAT</span>
+                        <span className="text-sm font-medium">{pricing.vat > 0 ? `£${pricing.vat.toFixed(2)}` : '£0.00'}</span>
                       </div>
-                      <div className="border-t pt-2">
-                        <div className="flex justify-between text-xl font-bold">
-                          <span>Total</span>
+                      <div className="border-t pt-3">
+                        <div className="flex justify-between text-lg font-bold">
+                          <span>Total Price</span>
                           <span>{pricing.total > 0 ? `£${pricing.total.toFixed(2)}` : '£0.00'}</span>
                         </div>
                       </div>
