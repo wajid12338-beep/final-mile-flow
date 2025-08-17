@@ -18,6 +18,8 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
   const map = useRef<google.maps.Map | null>(null);
   const directionsService = useRef<google.maps.DirectionsService | null>(null);
   const directionsRenderer = useRef<google.maps.DirectionsRenderer | null>(null);
+  const pickupMarker = useRef<google.maps.Marker | null>(null);
+  const deliveryMarker = useRef<google.maps.Marker | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Get Google Maps API key and load script
@@ -68,15 +70,12 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
 
     directionsService.current = new google.maps.DirectionsService();
     directionsRenderer.current = new google.maps.DirectionsRenderer({
-      suppressMarkers: false,
+      suppressMarkers: true, // We'll add custom markers
       draggable: false,
       polylineOptions: {
         strokeColor: '#ff6b35',
         strokeWeight: 4,
         strokeOpacity: 0.8,
-      },
-      markerOptions: {
-        draggable: false
       }
     });
     
@@ -102,9 +101,52 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
       if (status === 'OK' && result) {
         console.log('=== DEBUG: Route found, displaying on map');
         
-        // Set the directions directly - no need to clear first
+        // Set the directions
         directionsRenderer.current?.setDirections(result);
-        console.log('=== DEBUG: Route displayed successfully');
+        
+        // Clear existing markers
+        if (pickupMarker.current) {
+          pickupMarker.current.setMap(null);
+        }
+        if (deliveryMarker.current) {
+          deliveryMarker.current.setMap(null);
+        }
+
+        // Add custom pickup marker (green with "A")
+        pickupMarker.current = new google.maps.Marker({
+          position: { lat: pickup.lat, lng: pickup.lng },
+          map: map.current,
+          title: 'Pickup Location',
+          label: {
+            text: 'A',
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: '14px'
+          },
+          icon: {
+            url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+
+        // Add custom delivery marker (red with "B")
+        deliveryMarker.current = new google.maps.Marker({
+          position: { lat: delivery.lat, lng: delivery.lng },
+          map: map.current,
+          title: 'Delivery Location',
+          label: {
+            text: 'B',
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: '14px'
+          },
+          icon: {
+            url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+        
+        console.log('=== DEBUG: Route and markers displayed successfully');
       } else {
         console.error('=== DEBUG: Directions request failed:', status);
         if (status === 'REQUEST_DENIED') {
