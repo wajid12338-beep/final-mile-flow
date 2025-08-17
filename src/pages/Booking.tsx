@@ -697,34 +697,66 @@ const Booking = () => {
                   </CardContent>
                 </Card>
 
-                {/* Pricing */}
+                {/* Pricing Summary */}
                 <Card>
-                  <CardContent className="p-6 space-y-3">
+                  <CardContent className="p-6 space-y-4">
+                    {/* Address Summary */}
+                    {watchedCollectFrom && (
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Collection:</Label>
+                        <p className="text-sm font-medium">{watchedCollectFrom}</p>
+                      </div>
+                    )}
+                    {watchedDeliverTo && (
+                      <div>
+                        <Label className="text-sm font-medium text-muted-foreground">Delivery:</Label>
+                        <p className="text-sm font-medium">{watchedDeliverTo}</p>
+                      </div>
+                    )}
+
+                    {/* Distance */}
+                    {pickupCoords && deliveryCoords && (
+                      <div className="text-xs text-muted-foreground">
+                        Distance: {calculateDistance(pickupCoords, deliveryCoords).toFixed(1)} miles
+                      </div>
+                    )}
+
+                    {/* Pricing */}
                     {isCalculatingPrice && (
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <Loader2 className="w-4 h-4 animate-spin" />
                         <span className="text-sm">Calculating price...</span>
                       </div>
                     )}
-                    <div className="flex justify-between font-semibold text-lg">
-                      <span>Price (excl. VAT):</span>
-                      <span>{pricing.price > 0 ? `£${pricing.price.toFixed(2)}` : '-'}</span>
-                    </div>
-                    <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>VAT (20%):</span>
-                      <span>{pricing.vat > 0 ? `£${pricing.vat.toFixed(2)}` : '-'}</span>
-                    </div>
-                    <div className="border-t pt-3">
-                      <div className="flex justify-between font-bold text-xl text-logistics-orange">
-                        <span>Total (incl. VAT):</span>
-                        <span>{pricing.total > 0 ? `£${pricing.total.toFixed(2)}` : '-'}</span>
+                    
+                    <div className="space-y-2 border-t pt-4">
+                      <div className="flex justify-between text-lg font-semibold">
+                        <span>Price</span>
+                        <span>{pricing.price > 0 ? `£${pricing.price.toFixed(2)}` : '£0.00'}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span>VAT</span>
+                        <span>{pricing.vat > 0 ? `£${pricing.vat.toFixed(2)}` : '£0.00'}</span>
+                      </div>
+                      <div className="border-t pt-2">
+                        <div className="flex justify-between text-xl font-bold">
+                          <span>Total</span>
+                          <span>{pricing.total > 0 ? `£${pricing.total.toFixed(2)}` : '£0.00'}</span>
+                        </div>
                       </div>
                     </div>
+
+                    {/* Proceed Button */}
                     {pricing.total > 0 && (
-                      <div className="text-xs text-muted-foreground mt-2">
-                        Distance: {pickupCoords && deliveryCoords ? 
-                          `${calculateDistance(pickupCoords, deliveryCoords).toFixed(1)} miles` : '-'}
-                      </div>
+                      <Button 
+                        className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 mt-4"
+                        onClick={() => {
+                          // Scroll to form submission
+                          document.querySelector('button[type="submit"]')?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                      >
+                        Proceed to payment
+                      </Button>
                     )}
                   </CardContent>
                 </Card>
