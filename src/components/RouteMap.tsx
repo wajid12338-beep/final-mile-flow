@@ -101,22 +101,28 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
       if (status === 'OK' && result) {
         console.log('=== DEBUG: Route found, displaying on map');
         
-        // Set the directions
-        directionsRenderer.current?.setDirections(result);
-        
-        // Clear existing markers
+        // Clear existing markers first
         if (pickupMarker.current) {
+          console.log('=== DEBUG: Clearing existing pickup marker');
           pickupMarker.current.setMap(null);
+          pickupMarker.current = null;
         }
         if (deliveryMarker.current) {
+          console.log('=== DEBUG: Clearing existing delivery marker');
           deliveryMarker.current.setMap(null);
+          deliveryMarker.current = null;
         }
 
-        // Add custom pickup marker (green with "A")
+        // Set the directions (this will draw the route line)
+        directionsRenderer.current?.setDirections(result);
+        console.log('=== DEBUG: Route line displayed');
+
+        // Create pickup marker (green with "A")
+        console.log('=== DEBUG: Creating pickup marker at:', pickup);
         pickupMarker.current = new google.maps.Marker({
           position: { lat: pickup.lat, lng: pickup.lng },
           map: map.current,
-          title: 'Pickup Location',
+          title: 'Pickup Location - A',
           label: {
             text: 'A',
             color: 'white',
@@ -125,19 +131,21 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
           },
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
-            fillColor: '#22c55e',
+            fillColor: '#22c55e', // Green
             fillOpacity: 1,
             strokeColor: '#ffffff',
-            strokeWeight: 2,
-            scale: 12
-          }
+            strokeWeight: 3,
+            scale: 15
+          },
+          zIndex: 1000 // Ensure it's on top
         });
 
-        // Add custom delivery marker (red with "B")
+        // Create delivery marker (red with "B")
+        console.log('=== DEBUG: Creating delivery marker at:', delivery);
         deliveryMarker.current = new google.maps.Marker({
           position: { lat: delivery.lat, lng: delivery.lng },
           map: map.current,
-          title: 'Delivery Location',
+          title: 'Delivery Location - B',
           label: {
             text: 'B',
             color: 'white',
@@ -146,15 +154,19 @@ const RouteMap: React.FC<RouteMapProps> = ({ pickup, delivery, className = "" })
           },
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
-            fillColor: '#ef4444',
+            fillColor: '#ef4444', // Red
             fillOpacity: 1,
             strokeColor: '#ffffff',
-            strokeWeight: 2,
-            scale: 12
-          }
+            strokeWeight: 3,
+            scale: 15
+          },
+          zIndex: 1000 // Ensure it's on top
         });
         
-        console.log('=== DEBUG: Route and custom markers displayed successfully');
+        console.log('=== DEBUG: Both markers created successfully');
+        console.log('=== DEBUG: Pickup marker visible:', pickupMarker.current.getVisible());
+        console.log('=== DEBUG: Delivery marker visible:', deliveryMarker.current.getVisible());
+        
       } else {
         console.error('=== DEBUG: Directions request failed:', status);
         if (status === 'REQUEST_DENIED') {
