@@ -24,7 +24,7 @@ const Footer = () => {
             <ul className="space-y-2 text-white/80">
               <li><a href="#services" className="hover:text-logistics-orange transition-colors duration-200">Standard Same Day Delivery</a></li>
               <li><a href="#services" className="hover:text-logistics-orange transition-colors duration-200">Timed Delivery</a></li>
-              <li><a href="#services" className="hover:text-logistics-orange transition-colors duration-200">Heavy Haulage</a></li>
+              <li><a href="#services" className="hover:text-logistics-orange transition-colors duration-200">Light Haulage</a></li>
               <li><a href="#services" className="hover:text-logistics-orange transition-colors duration-200">Bespoke Logistics Solutions</a></li>
             </ul>
           </div>

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Truck, Package, Shield, Settings, CheckCircle, ArrowRight } from "lucide-react";
 
-const HeavyHaulage = () => {
+const LightHaulage = () => {
   return (
     <div className="min-h-screen">
       <Header />
@@ -14,13 +14,13 @@ const HeavyHaulage = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center text-white">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Heavy Haulage & Specialist Delivery
+              Light Haulage & Specialist Delivery
             </h1>
             <p className="text-xl md:text-2xl leading-relaxed opacity-90 mb-8">
               Oversized, palletised, and high-value goods handled with professional care
             </p>
             <p className="text-lg leading-relaxed opacity-80 max-w-3xl mx-auto mb-8">
-              From small vans to large Luton vehicles, Fleetory's heavy haulage service handles oversized, 
+              From small vans to large Luton vehicles, Fleetory's light haulage service handles oversized, 
               palletised, and specialist deliveries across the UK. Our professional drivers and wide range 
               of vehicles ensure your valuable goods arrive safely.
             </p>
@@ -30,7 +30,7 @@ const HeavyHaulage = () => {
                 className="bg-logistics-orange hover:bg-logistics-orange-light text-white font-semibold px-8 py-4 text-lg"
                 onClick={() => window.location.href = '/booking'}
               >
-                Get Heavy Haulage Quote
+                Get Light Haulage Quote
               </Button>
               <Button 
                 size="lg"
@@ -244,7 +244,7 @@ const HeavyHaulage = () => {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-6">
-              Heavy Haulage Process
+              Light Haulage Process
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Professional assessment and handling from collection to delivery
@@ -289,10 +289,10 @@ const HeavyHaulage = () => {
         <div className="container mx-auto px-6 text-center">
           <div className="max-w-3xl mx-auto text-white">
             <h2 className="text-4xl font-bold mb-6">
-              Need Heavy Haulage Services?
+              Need Light Haulage Services?
             </h2>
             <p className="text-xl mb-8 opacity-90">
-              From small specialist items to large construction materials, our heavy haulage service 
+              From small specialist items to large construction materials, our light haulage service 
               handles it all with professional care and the right equipment.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -320,4 +320,4 @@ const HeavyHaulage = () => {
   );
 };
 
-export default HeavyHaulage;
+export default LightHaulage;

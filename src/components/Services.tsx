@@ -18,7 +18,7 @@ const Services = () => {
     },
     {
       icon: Truck,
-      title: "Heavy Haulage & Specialist Deliveries",
+      title: "Light Haulage & Specialist Deliveries",
       description: "Oversized, palletised, or high-value goods — handled with care. Wide range of vehicle options and professional handling.",
       features: ["Motorcycle to Luton Van options", "Tail-lift access (where required)", "Goods in Transit insurance", "Fragile equipment or household goods"],
     },

@@ -52,8 +52,8 @@ const Header = () => {
                         <div className="font-semibold text-logistics-blue">Timed Delivery</div>
                         <div className="text-sm text-gray-600">Scheduled pickup and drop-off with guaranteed time slots</div>
                       </NavigationMenuLink>
-                      <NavigationMenuLink href="/services/heavy-haulage" className="block p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                        <div className="font-semibold text-logistics-blue">Heavy Haulage</div>
+                      <NavigationMenuLink href="/services/light-haulage" className="block p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div className="font-semibold text-logistics-blue">Light Haulage</div>
                         <div className="text-sm text-gray-600">Oversized and specialist deliveries with professional handling</div>
                       </NavigationMenuLink>
                     </div>

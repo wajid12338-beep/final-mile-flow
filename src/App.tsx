@@ -13,7 +13,7 @@ import Fleet from "./pages/Fleet";
 import IndustriesPage from "./pages/Industries";
 import SameDayDelivery from "./pages/services/SameDayDelivery";
 import TimedDelivery from "./pages/services/TimedDelivery";
-import HeavyHaulage from "./pages/services/HeavyHaulage";
+import LightHaulage from "./pages/services/LightHaulage";
 import Healthcare from "./pages/industries/Healthcare";
 import LegalServices from "./pages/industries/LegalServices";
 import Construction from "./pages/industries/Construction";
@@ -41,7 +41,7 @@ const App = () => (
          <Route path="/industries" element={<IndustriesPage />} />
          <Route path="/services/same-day-delivery" element={<SameDayDelivery />} />
          <Route path="/services/timed-delivery" element={<TimedDelivery />} />
-         <Route path="/services/heavy-haulage" element={<HeavyHaulage />} />
+         <Route path="/services/light-haulage" element={<LightHaulage />} />
          <Route path="/industries/healthcare" element={<Healthcare />} />
          <Route path="/industries/legal-services" element={<LegalServices />} />
          <Route path="/industries/construction" element={<Construction />} />
