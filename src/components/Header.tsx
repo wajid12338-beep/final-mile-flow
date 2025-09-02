@@ -110,6 +110,12 @@ const Header = () => {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
+                <NavigationMenuLink href="/faq" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-3 py-2 text-sm whitespace-nowrap">
+                  FAQ
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
                 <NavigationMenuLink href="/contact" className="text-foreground hover:text-logistics-blue transition-colors duration-200 font-medium px-3 py-2 text-sm whitespace-nowrap">
                   Contact Us
                 </NavigationMenuLink>
