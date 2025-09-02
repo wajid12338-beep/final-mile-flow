@@ -87,7 +87,7 @@ You can get an instant quote on our website by entering your delivery details.`
     },
     {
       question: "Are my parcels insured during transit?",
-      answer: "All parcels are covered by our standard transit insurance up to £100. Additional insurance coverage is available for high-value items up to £10,000 for a small additional fee."
+      answer: "All parcels are covered by our comprehensive goods in transit insurance up to £20,000. This provides excellent protection for your valuable items during delivery."
     },
     {
       question: "Do you handle fragile or special requirement items?",
