@@ -120,3 +120,21 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Review scroll animation */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-2688px); /* 7 reviews * 384px */
+  }
+}
+
+.animate-scroll-reviews {
+  animation: scroll-left 60s linear infinite;
+}
+
+.animate-scroll-reviews:hover {
+  animation-play-state: paused;
+}
